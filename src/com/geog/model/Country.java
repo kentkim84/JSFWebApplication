@@ -6,7 +6,7 @@ import java.sql.ResultSet;
 import java.sql.Statement;
 
 import javax.faces.bean.ManagedBean;  
-import javax.faces.bean.RequestScoped; 
+import javax.faces.bean.RequestScoped;
 
 @ManagedBean
 @RequestScoped
@@ -15,6 +15,17 @@ public class Country {
 	private String co_name;
 	private String co_details;
 	
+	public Country() {
+		super();		
+	}
+
+	public Country(String co_code, String co_name, String co_details) {
+		super();
+		this.co_code = co_code;
+		this.co_name = co_name;
+		this.co_details = co_details;
+	}
+
 	public String getCo_code() {
 		return co_code;
 	}
@@ -30,7 +41,7 @@ public class Country {
 	public void setCo_name(String co_name) {
 		this.co_name = co_name;
 	}
-
+	
 	public String getCo_details() {
 		return co_details;
 	}
