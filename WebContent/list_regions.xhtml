@@ -10,34 +10,34 @@
 <h:body>
 	<h:form id="form">
 		<h:button value = "Add Region" outcome="add_region" />
-	</h:form>  
-	<br/>
-	<h:dataTable value = "#{geography.regionList}" var = "region"
-	           styleClass = "styleTable"
-	           headerClass = "styleTableHeader"
-	           rowClasses = "styleTableOddRow,styleTableEvenRow">
-	           
-		<h:column>    				
-			<f:facet name = "header">Country Code</f:facet>		
-			<h:outputText value="#{region.co_code}"/>
-		</h:column>
-		
-		<h:column>
-			<f:facet name = "header">Region Code</f:facet>
-			<h:outputText value="#{region.reg_code}"/>			
-		</h:column>
-		
-		<h:column>
-			<f:facet name = "header">Region Name</f:facet>
-			<h:outputText value="#{region.reg_name}"/>			
-		</h:column>
-		
-		<h:column>
-			<f:facet name = "header">Region Details</f:facet>
-			<h:outputText value="#{region.reg_details}"/>
-		</h:column>
-		
-	</h:dataTable>
+		<br/><br/>
+		<h:dataTable value = "#{regionCtrl.regionList}" var = "region"
+		           styleClass = "styleTable"
+		           headerClass = "styleTableHeader"
+		           rowClasses = "styleTableOddRow,styleTableEvenRow">
+		           
+			<h:column>    				
+				<f:facet name = "header">Country Code</f:facet>		
+				<h:outputText value="#{region.co_code}"/>
+			</h:column>
+			
+			<h:column>
+				<f:facet name = "header">Region Code</f:facet>
+				<h:outputText value="#{region.reg_code}"/>			
+			</h:column>
+			
+			<h:column>
+				<f:facet name = "header">Region Name</f:facet>
+				<h:outputText value="#{region.reg_name}"/>			
+			</h:column>
+			
+			<h:column>
+				<f:facet name = "header">Region Details</f:facet>
+				<h:outputText value="#{region.reg_details}"/>
+			</h:column>
+			
+		</h:dataTable>
+	</h:form>
 	<h:link value="Home" outcome="index"/>
 </h:body>
 </html>

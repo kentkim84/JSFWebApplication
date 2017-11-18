@@ -2,15 +2,14 @@
 <html lang="en"
 	xmlns="http://www.w3.org/1999/xhtml"
 	xmlns:h="http://xmlns.jcp.org/jsf/html"
-	xmlns:f="http://xmlns.jcp.org/jsf/core"
-	xmlns:p="http://xmlns.jcp.org/jsf/passthrough">
+	xmlns:f="http://xmlns.jcp.org/jsf/core">
 <h:head>
 	<title>Add Region</title>
 	<h:outputStylesheet library = "css" name = "styles.css"  />
 </h:head>
 <h:body>
 	<h:form id="form">
-		<h:outputText value="geography.err"></h:outputText>  
+		<h:outputText value="regionCtrl.err"></h:outputText>  
 		<h3>Add Region</h3>
 		<br/>
 		<h:outputLabel for="countryCode">Country Code: </h:outputLabel>
@@ -28,9 +27,9 @@
 		<h:outputLabel for="regionDetails">Region Details: </h:outputLabel>
 		<h:inputText id="regionDetails" value="#{region.reg_details}"/>
 		<br/>
-		<h:commandButton value="Add" type="submit" action="#{geography.addRegion(region)}"/>  
+		<h:commandButton value="Add" type="submit" action="#{regionCtrl.addRegion(region)}"/>  
 	</h:form>
 	<h:link value="Home" outcome="index"/>
-	<h:link value="Countries" outcome="list_regions"/>
+	<h:link value="Regions" outcome="list_regions"/>
 </h:body>
 </html>

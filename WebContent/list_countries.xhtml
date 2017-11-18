@@ -12,7 +12,7 @@
 	<h:form id="form">  
 		<h:button value = "Add Country" outcome="add_country" />
 		<br/><br/>
-		<h:dataTable value = "#{geography.countryList}" var = "country"
+		<h:dataTable value = "#{countryCtrl.countryList}" var = "country"
 		           styleClass = "styleTable"
 		           headerClass = "styleTableHeader"
 		           rowClasses = "styleTableOddRow,styleTableEvenRow">
@@ -36,11 +36,11 @@
 				<f:facet name = "header">Action</f:facet>
 				<!-- <h:button value = "Update" outcome="update_country" /> -->
 				<h:commandButton value="Update" type="submit"
-					action="#{geography.passValues(country)}" />	
+					action="#{countryCtrl.passValues(country)}" />	
 				<br/>
 				<h:commandButton value="Delete" type="submit" 
 					onclick="return confirm('Delete this Country?');"
-					action="#{geography.deleteCountry(country)}" />		
+					action="#{countryCtrl.deleteCountry(country)}" />		
 			</h:column>
 			
 		</h:dataTable>
