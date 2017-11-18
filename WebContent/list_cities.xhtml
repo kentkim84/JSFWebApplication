@@ -10,47 +10,49 @@
 </h:head>
 <h:body>
 	<h:form id="form">
-		<h:commandButton value = "Add City" action = "add_cities.xhtml" />
+		<h:button value = "Add City" outcome="add_city" />
 	</h:form>
 	<br/>
-	<h:dataTable value = "#{geography.cities}" var = "city"
+	<h:dataTable value = "#{geography.cityList}" var = "city"
 	           styleClass = "styleTable"
 	           headerClass = "styleTableHeader"
 	           rowClasses = "styleTableOddRow,styleTableEvenRow">
 	           
 		<h:column>    				
-			<f:facet name = "header">City Code</f:facet>		
-			#{city.cty_code}
+			<f:facet name = "header">City Code</f:facet>
+			<h:outputText value="#{city.cty_code}"/>					
 		</h:column>
 		
 		<h:column>    				
-			<f:facet name = "header">Country Code</f:facet>		
-			#{city.co_code}
+			<f:facet name = "header">Country Code</f:facet>
+			<h:outputText value="#{city.co_code}"/>				
 		</h:column>
 		
 		<h:column>    				
-			<f:facet name = "header">Region Code</f:facet>		
-			#{city.reg_code}
+			<f:facet name = "header">Region Code</f:facet>
+			<h:outputText value="#{city.reg_code}"/>					
 		</h:column>
 		
 		<h:column>    				
-			<f:facet name = "header">City Name</f:facet>		
-			#{city.cty_name}
+			<f:facet name = "header">City Name</f:facet>
+			<h:outputText value="#{city.cty_name}"/>					
 		</h:column>
 		
 		<h:column>    				
-			<f:facet name = "header">Population</f:facet>		
-			#{city.population}
+			<f:facet name = "header">Population</f:facet>
+			<h:outputText value="#{city.population}"/>					
 		</h:column>
 		
 		<h:column>    				
-			<f:facet name = "header">By The Sea</f:facet>		
-			#{city.byTheSea}
+			<f:facet name = "header">By The Sea</f:facet>
+			<h:outputText value="#{city.isCoastal}"/>		
+			
 		</h:column>
 		
 		<h:column>    				
-			<f:facet name = "header">Area</f:facet>		
-			#{city.areaKm}
+			<f:facet name = "header">Area</f:facet>
+			<h:outputText value="#{city.areaKm}"/>		
+			
 		</h:column>
 		
 		<h:column>

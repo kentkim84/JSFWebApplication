@@ -14,17 +14,17 @@
 		<h3>Add Country</h3>
 		<br/>
 		<h:outputLabel for="countryCode">Country Code: </h:outputLabel>
-		<h:inputText id="countryCode" value="#{geography.co_code}" required="true" requiredMessage="Country Code is required"/>
+		<h:inputText id="countryCode" value="#{country.co_code}" required="true" requiredMessage="Country Code is required"/>
 		<h:message for="countryCode" style="color: red"/> 
 		<br/>
 		<h:outputLabel for="countryName">Country Name: </h:outputLabel>
-		<h:inputText id="countryName" value="#{geography.co_name}" required="true" requiredMessage="Country Name is required"/>
+		<h:inputText id="countryName" value="#{country.co_name}" required="true" requiredMessage="Country Name is required"/>
 		<h:message for="countryName" style="color: red"/>
 		<br/>
 		<h:outputLabel for="countryDetails">Country Details: </h:outputLabel>
-		<h:inputText id="countryDetails" value="#{geography.co_details}"/>
+		<h:inputText id="countryDetails" value="#{country.co_details}"/>
 		<br/>
-		<h:commandButton value="Add" action="addCountry()"/>  
+		<h:commandButton value="Add" type="submit" action="#{geography.addCountry(country)}"/>  
 	</h:form>
 	<h:link value="Home" outcome="index"/>
 	<h:link value="Countries" outcome="list_countries"/>

@@ -14,21 +14,21 @@
 		<h3>Add Region</h3>
 		<br/>
 		<h:outputLabel for="countryCode">Country Code: </h:outputLabel>
-		<h:inputText id="countryCode" value="#{geography.co_code}" required="true" requiredMessage="Country Code is required"/>
+		<h:inputText id="countryCode" value="#{region.co_code}" required="true" requiredMessage="Country Code is required"/>
 		<h:message for="countryCode" style="color: red"/> 
 		<br/>
 		<h:outputLabel for="regionCode">Region Code: </h:outputLabel>
-		<h:inputText id="regionCode" value="#{geography.reg_code}" required="true" requiredMessage="Region Code is required"/>
+		<h:inputText id="regionCode" value="#{region.reg_code}" required="true" requiredMessage="Region Code is required"/>
 		<h:message for="regionCode" style="color: red"/> 
 		<br/>
 		<h:outputLabel for="regionName">Region Name: </h:outputLabel>
-		<h:inputText id="regionName" value="#{geography.reg_name}" required="true" requiredMessage="Region Name is required"/>
+		<h:inputText id="regionName" value="#{region.reg_name}" required="true" requiredMessage="Region Name is required"/>
 		<h:message for="regionName" style="color: red"/>
 		<br/>
 		<h:outputLabel for="regionDetails">Region Details: </h:outputLabel>
-		<h:inputText id="regionDetails" value="#{geography.reg_details}"/>
+		<h:inputText id="regionDetails" value="#{region.reg_details}"/>
 		<br/>
-		<h:commandButton value="Add" action="addRegion()"/>  
+		<h:commandButton value="Add" type="submit" action="#{geography.addRegion(region)}"/>  
 	</h:form>
 	<h:link value="Home" outcome="index"/>
 	<h:link value="Countries" outcome="list_regions"/>

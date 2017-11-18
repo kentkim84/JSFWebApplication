@@ -1,10 +1,5 @@
 package com.geog.model;
 
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.ResultSet;
-import java.sql.Statement;
-
 import javax.faces.bean.ManagedBean;  
 import javax.faces.bean.RequestScoped; 
 
@@ -47,7 +42,8 @@ public class Region extends Country{
 	
 	// inheritance of country code
 	public String getCo_code() {
-		return super.getCo_code();
+		co_code = super.getCo_code(); 
+		return co_code;
 	}
 	
 	public void setCo_code(String co_code) {

@@ -1,9 +1,5 @@
 package com.geog.model;
 
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.ResultSet;
-import java.sql.Statement;
 
 import javax.faces.bean.ManagedBean;  
 import javax.faces.bean.RequestScoped;
@@ -14,7 +10,7 @@ public class City extends Region{
 	private String cty_code;
 	private String cty_name;
 	private int population;
-	private boolean byTheSea;
+	private boolean isCoastal;
 	private double areaKm;
 	// inheritance of country code and region code
 	private String co_code; 
@@ -47,11 +43,11 @@ public class City extends Region{
 		this.population = population;
 	}
 	
-	public boolean isByTheSea() {
-		return byTheSea;
+	public boolean getIsCoastal() {
+		return isCoastal;
 	}
-	public void setByTheSea(boolean byTheSea) {
-		this.byTheSea = byTheSea;
+	public void setIsCoastal(boolean isCoastal) {
+		this.isCoastal = isCoastal;
 	}
 	
 	public double getAreaKm() {
@@ -64,7 +60,8 @@ public class City extends Region{
 	
 	// inheritance of country code
 	public String getCo_code() {
-		return super.getCo_code();
+		co_code = super.getCo_code();
+		return co_code;
 	}
 	
 	public void setCo_code(String co_code) {
@@ -72,7 +69,8 @@ public class City extends Region{
 	}
 	
 	public String getReg_code() {
-		return super.getReg_code();
+		reg_code = super.getReg_code();
+		return reg_code;
 	}
 	
 	public void setReg_code(String reg_code) {

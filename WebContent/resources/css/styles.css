@@ -13,9 +13,10 @@
  
  .styleTableOddRow {
     text-align:center;
-    background:none repeat scroll 0 0 #FFFFFF;	
+    background:none repeat scroll 0 0 #FFFFFF;
  }
  
- .styleTableEvenRow {    text-align:center;  
+ .styleTableEvenRow {    
+ 	text-align:center;  
     background:none repeat scroll 0 0 #D3D3D3;
  }

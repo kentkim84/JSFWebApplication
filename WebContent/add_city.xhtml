@@ -14,34 +14,34 @@
 		<h3>Add City</h3>
 		<br/>
 		<h:outputLabel for="cityCode">City Code: </h:outputLabel>
-		<h:inputText id="cityCode" value="#{geography.cty_code}" required="true" requiredMessage="City Code is required"/>
+		<h:inputText id="cityCode" value="#{city.cty_code}" required="true" requiredMessage="City Code is required"/>
 		<h:message for="cityCode" style="color: red"/>
 		<br/>
 		<h:outputLabel for="countryCode">Country Code: </h:outputLabel>
-		<h:inputText id="countryCode" value="#{geography.co_code}" required="true" requiredMessage="Country Code is required"/>
+		<h:inputText id="countryCode" value="#{city.co_code}" required="true" requiredMessage="Country Code is required"/>
 		<h:message for="countryCode" style="color: red"/> 
 		<br/>
 		<h:outputLabel for="regionCode">Region Code: </h:outputLabel>
-		<h:inputText id="regionCode" value="#{geography.reg_code}" required="true" requiredMessage="Region Code is required"/>
+		<h:inputText id="regionCode" value="#{city.reg_code}" required="true" requiredMessage="Region Code is required"/>
 		<h:message for="regionCode" style="color: red"/> 
 		<br/>
 		<h:outputLabel for="cityName">City Name: </h:outputLabel>
-		<h:inputText id="cityName" value="#{geography.cty_name}" required="true" requiredMessage="City Name is required"/>
+		<h:inputText id="cityName" value="#{city.cty_name}" required="true" requiredMessage="City Name is required"/>
 		<h:message for="cityName" style="color: red"/>
 		<br/>
 		<h:outputLabel for="population">Population: </h:outputLabel>
-		<h:inputText id="population" value="#{geography.population}"/>
+		<h:inputText id="population" value="#{city.population}"/>
 		<br/>
 		<h:outputLabel for="byTheSea">By The Sea</h:outputLabel>
-		<h:selectOneListbox value = "#{geography.seaCondition}"> 
+		<h:selectOneMenu value = "#{city.isCoastal}"> 
 			<f:selectItem itemValue = "true" itemLabel = "True" /> 
 			<f:selectItem itemValue = "false" itemLabel = "False" />     
-		</h:selectOneListbox>
+		</h:selectOneMenu>
 		<br/>
 		<h:outputLabel for="areaKm">Area (KM): </h:outputLabel>
-		<h:inputText id="areaKm" value="#{geography.areaKm}"/>
+		<h:inputText id="areaKm" value="#{city.areaKm}"/>
 		<br/>
-		<h:commandButton value="Add" action="addCity()"/>
+		<h:commandButton value="Add" action="#{geography.addCity(city)}"/>
 	</h:form>
 	<h:link value="Home" outcome="index"/>
 	<h:link value="Countries" outcome="list_cities"/>

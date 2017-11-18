@@ -10,11 +10,12 @@
 </h:head>
 <h:body>
 	<h:form id="form">
+		<h:outputText value="geography.err"></h:outputText>  
 		<h3>Update Country</h3>
 		<br/>
 		<h:outputLabel for="countryCode">Country Code: </h:outputLabel>
 		<h:inputText id="countryCode" value="#{geography.co_code}" required="true" requiredMessage="Country Code is required"/>
-		<h:message for="countryCode" style="color: red"/> 
+		<h:message for="countryCode" style="color: red"/>	
 		<br/>
 		<h:outputLabel for="countryName">Country Name: </h:outputLabel>
 		<h:inputText id="countryName" value="#{geography.co_name}" required="true" requiredMessage="Country Name is required"/>
@@ -23,7 +24,7 @@
 		<h:outputLabel for="countryDetails">Country Details: </h:outputLabel>
 		<h:inputText id="countryDetails" value="#{geography.co_details}"/>
 		<br/>
-		<h:commandButton value="Update" action="updateCountry()"/>  
+		<h:commandButton value="Update" type="submit" action="#{geography.updateCountry}"/>  
 	</h:form>
 	<h:link value="Home" outcome="index"/>
 	<h:link value="Countries" outcome="list_countries"/>
