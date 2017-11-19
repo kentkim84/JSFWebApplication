@@ -313,7 +313,7 @@ public class GeographyDaoImpl implements GeographyDao {
 			}
 		}	
 	}
-
+	
 	@Override
 	public List<City> getAllCities() {
 		Statement stmt = null;
@@ -356,6 +356,37 @@ public class GeographyDaoImpl implements GeographyDao {
 			}
 		}
 		return cityList;
+	}
+	
+	// targetValue is which user wants to get from the source. ex) country name from the country table
+	public String getValueFromMultiTables(City cty, String targetValue, String commonValue, String source) {
+		PreparedStatement pstmt = null;
+		ResultSet rs = null;
+		String output = "";
+		try {
+			String query = "select "+targetValue+" from "+source+" where "+commonValue+" = "
+					+ "(select "+commonValue+" from city where cty_code = ?)";
+			pstmt = conn.prepareStatement(query);			
+			pstmt.setString(1, cty.getCty_code());
+			rs = pstmt.executeQuery();
+			if (rs != null) {
+				while (rs.next()) {					
+					output = rs.getString(1);
+				}
+			}
+			else {
+				System.out.println("Result set is null");
+			}
+		} catch (Exception e) {
+			System.out.println(e);
+		} finally {
+			try {
+				pstmt.close();
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
+		}
+		return output;
 	}
 
 	@Override

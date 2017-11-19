@@ -76,11 +76,13 @@ public class CityCtrl {
 	}
 	
 	public String getCo_name() {
-		return null;
+		System.out.println("get country name");
+		return geographyDao.getValueFromMultiTables(this.city, "co_name", "co_code", "country");
 	}
 	
 	public String getReg_name() {
-		return null;
+		System.out.println("get region name");
+		return geographyDao.getValueFromMultiTables(this.city, "reg_name", "reg_code", "region");
 	}
 	
 	public List<City> getCityList() {
@@ -95,10 +97,10 @@ public class CityCtrl {
 	}
 	
 	public String displayCity(City city) {
+		this.city = city;
 		this.city.setCty_code(city.getCty_code());
-		this.city.setCo_code(city.getCo_code());
-		this.city.setReg_code(city.getReg_code());
 		this.city.setCty_name(city.getCty_name());
+		// country and region name are executed from separated methods
 		this.city.setPopulation(city.getPopulation());
 		this.city.setIsCoastal(city.getIsCoastal());
 		this.city.setAreaKm(city.getAreaKm());

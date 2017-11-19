@@ -18,6 +18,7 @@ public interface GeographyDao {
 	public void deleteRegion(Region region);
 	// City section
 	public List<City> getAllCities();
+	public String getValueFromMultiTables(City cty, String targetValue, String commonValue, String source);
 	public City getCity(String code);
 	public void addCity(City city);
 	public void updateCity(City city);
