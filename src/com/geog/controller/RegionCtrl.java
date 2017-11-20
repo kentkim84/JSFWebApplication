@@ -6,12 +6,12 @@ import java.util.ArrayList;
 import java.util.List;
 
 import javax.faces.bean.ManagedBean;
-//import javax.faces.bean.SessionScoped;
-import javax.faces.bean.RequestScoped;
+import javax.faces.bean.SessionScoped;
+//import javax.faces.bean.RequestScoped;
 
 @ManagedBean
-//@SessionScoped
-@RequestScoped
+@SessionScoped
+//@RequestScoped
 public class RegionCtrl {
 	private GeographyDao geographyDao = new GeographyDaoImpl();
 	private List<Region> regionList;

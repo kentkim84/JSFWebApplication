@@ -7,7 +7,7 @@ public interface GeographyDao {
 	// Country section
 	public List<Country> getAllCountries();
 	public String addCountry(Country country);
-	public String updateCountry(Country country);
+	public String updateCountry(Country country, String srcCo_code);
 	public String deleteCountry(Country country);
 	// Region section
 	public List<Region> getAllRegions();

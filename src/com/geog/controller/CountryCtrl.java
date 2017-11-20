@@ -6,17 +6,18 @@ import java.util.ArrayList;
 import java.util.List;
 
 import javax.faces.bean.ManagedBean;
-//import javax.faces.bean.SessionScoped;
-import javax.faces.bean.RequestScoped;
+import javax.faces.bean.SessionScoped;
+//import javax.faces.bean.RequestScoped;
 
 @ManagedBean
-//@SessionScoped
-@RequestScoped
+@SessionScoped
+//@RequestScoped
 public class CountryCtrl {
 	private GeographyDao geographyDao = new GeographyDaoImpl();
 	private List<Country> countryList;
 	private Country country = new Country();
 	private String returnMessage = new String();
+	private String srcCo_code;
 
 	public CountryCtrl() {
 	}
@@ -47,7 +48,7 @@ public class CountryCtrl {
 	
 	public String geReturnMessage() {
 		//System.out.println("get "+returnMessage);
-		return "returnMessage";
+		return returnMessage;
 	}
 	
 	public void setReturnMessage(String returnMessage) {
@@ -65,24 +66,20 @@ public class CountryCtrl {
 		return "list_countries.xhtml";
 	}
 	
-	public String deleteCountry(Country country) {	
+	public String deleteCountry(Country country) {
 		returnMessage = geographyDao.deleteCountry(country);
 		if(returnMessage.contains("constraint")) {
-			System.out.println("A foreign key constraint fails: " + returnMessage);
-			this.setReturnMessage(returnMessage);
+			System.out.println(returnMessage);
 		}
 		else {
 			System.out.println(returnMessage);
-			this.setReturnMessage("done");
-			
 		}
 		
 		return "list_countries.xhtml";
 	}
 		
 	public String updateCountry() {		
-//		this.country = country;
-		geographyDao.updateCountry(country);
+		geographyDao.updateCountry(country, srcCo_code);
 		return "list_countries.xhtml";
 	}
 	
@@ -90,6 +87,7 @@ public class CountryCtrl {
 		this.country.setCo_code(country.getCo_code());
 		this.country.setCo_name(country.getCo_name());
 		this.country.setCo_details(country.getCo_details());
+		srcCo_code = country.getCo_code();		
 		return "update_country.xhtml";
 	}
 }
