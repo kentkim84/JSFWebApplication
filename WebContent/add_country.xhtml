@@ -9,12 +9,14 @@
 </h:head>
 <h:body>
 	<h:form id="form">
-		<h:outputText value="countryCtrl.err"></h:outputText>  
+		<h:message for="countryCode" style="color:blue" />  
 		<h3>Add Country</h3>
 		<br/>
 		<h:outputLabel for="countryCode">Country Code: </h:outputLabel>
-		<h:inputText id="countryCode" value="#{country.co_code}" required="true" requiredMessage="Country Code is required"/>
-		<h:message for="countryCode" style="color: red"/> 
+		<h:inputText id="countryCode" value="#{country.co_code}" required="true" requiredMessage="Country Code is required">
+			<f:validator validatorId="countryValidator" />
+        </h:inputText>
+		<h:message for="countryCode" style="color: red"/>		
 		<br/>
 		<h:outputLabel for="countryName">Country Name: </h:outputLabel>
 		<h:inputText id="countryName" value="#{country.co_name}" required="true" requiredMessage="Country Name is required"/>
