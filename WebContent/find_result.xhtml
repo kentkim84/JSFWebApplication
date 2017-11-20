@@ -9,44 +9,44 @@
 	<h:outputStylesheet library = "css" name = "styles.css"  />
 </h:head>
 <h:body>
-	<h:dataTable value = "#{geography.searchResult}" var = "result"
+	<h:dataTable value = "#{cityCtrl.resultList}" var = "result"
 	           styleClass = "styleTable"
 	           headerClass = "styleTableHeader"
 	           rowClasses = "styleTableOddRow,styleTableEvenRow">
 	           
 		<h:column>    				
 			<f:facet name = "header">City Code</f:facet>		
-			#{geography.cty_code}
+			<h:outputText value="#{result.cty_code}"/>
 		</h:column>
 		
 		<h:column>    				
 			<f:facet name = "header">City Name</f:facet>		
-			#{geography.cty_name}
+			<h:outputText value="#{result.cty_name}"/>
 		</h:column>
 		
 		<h:column>    				
 			<f:facet name = "header">Country</f:facet>		
-			#{geography.co_name}
+			<h:outputText value="#{result.co_name}"/>
 		</h:column>
 		
 		<h:column>    				
 			<f:facet name = "header">Region</f:facet>		
-			#{geography.reg_name}
+			<h:outputText value="#{result.reg_name}"/>
 		</h:column>
 		
 		<h:column>    				
 			<f:facet name = "header">City Population</f:facet>		
-			#{geography.population}
+			<h:outputText value="#{result.population}"/>
 		</h:column>
 		
 		<h:column>    				
 			<f:facet name = "header">By The Sea</f:facet>		
-			#{geography.byTheSea}
+			<h:outputText value="#{result.isCoastal}"/>
 		</h:column>
 		
 		<h:column>    				
 			<f:facet name = "header">Area (KM)</f:facet>		
-			#{geography.areaKm}
+			<h:outputText value="#{result.areaKm}"/>
 		</h:column>
 		
 	</h:dataTable>

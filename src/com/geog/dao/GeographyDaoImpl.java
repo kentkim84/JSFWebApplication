@@ -15,6 +15,7 @@ public class GeographyDaoImpl implements GeographyDao {
 	private List<Country> countryList;
 	private List<Region> regionList;
 	private List<City> cityList;
+	private List<Result> resultList;
 	
 	public GeographyDaoImpl() {
 		try {
@@ -40,8 +41,8 @@ public class GeographyDaoImpl implements GeographyDao {
 			String query = "select * from country";
 			stmt = conn.createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_UPDATABLE);
 			rs = stmt.executeQuery(query);
-			if (rs != null) {
-				while (rs.next()) {
+			if (rs.next()) {
+				do {
 					Country country = new Country();
 					String co_code = rs.getString("co_code");
 					String co_name = rs.getString("co_name");
@@ -50,7 +51,7 @@ public class GeographyDaoImpl implements GeographyDao {
 					country.setCo_name(co_name);
 					country.setCo_details(co_details);
 					countryList.add(country);
-				}
+				} while (rs.next());
 			}
 			else {
 				System.out.println("Result set is null");
@@ -59,6 +60,7 @@ public class GeographyDaoImpl implements GeographyDao {
 			System.out.println(e);
 		} finally {
 			try {
+				rs.close();
 				stmt.close();
 			} catch (SQLException e) {
 				e.printStackTrace();
@@ -68,42 +70,7 @@ public class GeographyDaoImpl implements GeographyDao {
 	}
 
 	@Override
-	public Country getCountry(String code) {
-		PreparedStatement pstmt = null;
-		ResultSet rs = null;
-		Country country = new Country();
-		try {
-			String query = "select * from country where co_code = ?";
-			pstmt = conn.prepareStatement(query);
-			pstmt.setString(1, code);
-			rs = pstmt.executeQuery();
-			if (rs != null) {
-				while (rs.next()) {
-					String co_code = rs.getString("co_code");
-					String co_name = rs.getString("co_name");
-					String co_details = rs.getString("co_details");
-					country.setCo_code(co_code);
-					country.setCo_name(co_name);
-					country.setCo_details(co_details);
-				}
-			}
-			else {
-				System.out.println("Result set is null");
-			}
-		} catch (Exception e) {
-			System.out.println(e);
-		} finally {
-			try {
-				pstmt.close();
-			} catch (SQLException e) {
-				e.printStackTrace();
-			}
-		}
-		return country;
-	}
-
-	@Override
-	public void addCountry(Country country) {
+	public String addCountry(Country country) {
 		PreparedStatement pstmt = null;
 		try {
 			String query = "insert into country values(?, ?, ?)";
@@ -113,13 +80,13 @@ public class GeographyDaoImpl implements GeographyDao {
 			pstmt.setString(3, country.getCo_details());
 			
 			int i = pstmt.executeUpdate();  
-			System.out.println(i+" records added");  
+			return i + " records added";  
 			
 		} catch (Exception e) {
-			System.out.println(e);
+			return e.getMessage();
 		} finally {
-			try {
-				pstmt.close();
+			try {			
+				pstmt.close();				
 			} catch (SQLException e) {
 				e.printStackTrace();
 			}
@@ -127,7 +94,7 @@ public class GeographyDaoImpl implements GeographyDao {
 	}
 
 	@Override
-	public void updateCountry(Country country) {
+	public String updateCountry(Country country) {
 		PreparedStatement pstmt = null;
 		try {
 			String query = "update country set co_name = ?, co_details = ? where co_code = ?";
@@ -137,11 +104,11 @@ public class GeographyDaoImpl implements GeographyDao {
 			pstmt.setString(3, country.getCo_code());
 			
 			int i = pstmt.executeUpdate();  
-			System.out.println(i+" records updated");
+			return i + " records updated";
 		} catch (Exception e) {
-			System.out.println(e);
+			return e.getMessage();
 		} finally {
-			try {
+			try {				
 				pstmt.close();
 			} catch (SQLException e) {
 				e.printStackTrace();
@@ -150,7 +117,7 @@ public class GeographyDaoImpl implements GeographyDao {
 	}
 
 	@Override
-	public void deleteCountry(Country country) {
+	public String deleteCountry(Country country) {
 		PreparedStatement pstmt = null;
 		try {
 			String query = "delete from country where co_code = ?";
@@ -158,11 +125,11 @@ public class GeographyDaoImpl implements GeographyDao {
 			pstmt.setString(1, country.getCo_code());
 			
 			int i = pstmt.executeUpdate();  
-			System.out.println(i+" records deleted");
+			return i + " records deleted";
 		} catch (Exception e) {
-			System.out.println(e);
+			return e.getMessage();
 		} finally {
-			try {
+			try {				
 				pstmt.close();
 			} catch (SQLException e) {
 				e.printStackTrace();
@@ -179,8 +146,8 @@ public class GeographyDaoImpl implements GeographyDao {
 			String query = "select * from region";
 			stmt = conn.createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_UPDATABLE);
 			rs = stmt.executeQuery(query);
-			if (rs != null) {
-				while (rs.next()) {
+			if (rs.next()) {
+				do {
 					Region region = new Region();
 					String co_code = rs.getString("co_code");
 					String reg_code = rs.getString("reg_code");
@@ -191,7 +158,7 @@ public class GeographyDaoImpl implements GeographyDao {
 					region.setReg_name(reg_name);
 					region.setReg_details(reg_details);
 					regionList.add(region);
-				}
+				} while (rs.next());
 			}
 			else {
 				System.out.println("Result set is null");
@@ -200,6 +167,7 @@ public class GeographyDaoImpl implements GeographyDao {
 			System.out.println(e);
 		} finally {
 			try {
+				rs.close();
 				stmt.close();
 			} catch (SQLException e) {
 				e.printStackTrace();
@@ -209,44 +177,7 @@ public class GeographyDaoImpl implements GeographyDao {
 	}
 
 	@Override
-	public Region getRegion(String code) {
-		PreparedStatement pstmt = null;
-		ResultSet rs = null;
-		Region region = new Region();
-		try {
-			String query = "select * from region where reg_code = ?";
-			pstmt = conn.prepareStatement(query);
-			pstmt.setString(1, code);
-			rs = pstmt.executeQuery();
-			if (rs != null) {
-				while (rs.next()) {
-					String co_code = rs.getString("co_code");
-					String reg_code = rs.getString("reg_code");
-					String reg_name = rs.getString("reg_name");
-					String reg_details = rs.getString("reg_desc");
-					region.setCo_code(co_code);
-					region.setReg_code(reg_code);
-					region.setReg_name(reg_name);
-					region.setReg_details(reg_details);
-				}
-			}
-			else {
-				System.out.println("Result set is null");
-			}
-		} catch (Exception e) {
-			System.out.println(e);
-		} finally {
-			try {
-				pstmt.close();
-			} catch (SQLException e) {
-				e.printStackTrace();
-			}
-		}
-		return region;
-	}
-
-	@Override
-	public void addRegion(Region region) {
+	public String addRegion(Region region) {
 		PreparedStatement pstmt = null;
 		try {
 			String query = "insert into region values(?, ?, ?, ?)";
@@ -257,10 +188,10 @@ public class GeographyDaoImpl implements GeographyDao {
 			pstmt.setString(4, region.getReg_details());
 			
 			int i = pstmt.executeUpdate();  
-			System.out.println(i+" records added");  
+			return i + " records added";  
 			
 		} catch (Exception e) {
-			System.out.println(e);
+			return e.getMessage();
 		} finally {
 			try {
 				pstmt.close();
@@ -271,7 +202,7 @@ public class GeographyDaoImpl implements GeographyDao {
 	}
 
 	@Override
-	public void updateRegion(Region region) {
+	public String updateRegion(Region region) {
 		PreparedStatement pstmt = null;
 		try {
 			String query = "update region set reg_name = ?, reg_desc = ? where reg_code = ?";
@@ -281,9 +212,9 @@ public class GeographyDaoImpl implements GeographyDao {
 			pstmt.setString(3, region.getReg_code());
 			
 			int i = pstmt.executeUpdate();  
-			System.out.println(i+" records updated");
+			return i + " records updated";
 		} catch (Exception e) {
-			System.out.println(e);
+			return e.getMessage();
 		} finally {
 			try {
 				pstmt.close();
@@ -294,7 +225,7 @@ public class GeographyDaoImpl implements GeographyDao {
 	}
 
 	@Override
-	public void deleteRegion(Region region) {
+	public String deleteRegion(Region region) {
 		PreparedStatement pstmt = null;
 		try {
 			String query = "delete from region where reg_code = ?";
@@ -302,9 +233,9 @@ public class GeographyDaoImpl implements GeographyDao {
 			pstmt.setString(1, region.getReg_code());
 			
 			int i = pstmt.executeUpdate();  
-			System.out.println(i+" records deleted");
+			return i + " records deleted";
 		} catch (Exception e) {
-			System.out.println(e);
+			return e.getMessage();
 		} finally {
 			try {
 				pstmt.close();
@@ -323,8 +254,8 @@ public class GeographyDaoImpl implements GeographyDao {
 			String query = "select * from city";
 			stmt = conn.createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_UPDATABLE);
 			rs = stmt.executeQuery(query);
-			if (rs != null) {
-				while (rs.next()) {
+			if (rs.next()) {
+				do {
 					City city = new City();
 					String cty_code = rs.getString("cty_code");
 					String co_code = rs.getString("co_code");
@@ -341,7 +272,7 @@ public class GeographyDaoImpl implements GeographyDao {
 					city.setIsCoastal(isCoastal);
 					city.setAreaKm(areaKM);
 					cityList.add(city);
-				}
+				} while (rs.next());
 			}
 			else {
 				System.out.println("Result set is null");
@@ -350,12 +281,65 @@ public class GeographyDaoImpl implements GeographyDao {
 			System.out.println(e);
 		} finally {
 			try {
+				rs.close();
 				stmt.close();
 			} catch (SQLException e) {
 				e.printStackTrace();
 			}
 		}
 		return cityList;
+	}
+	
+	public List<Result> searchCities(City city, String condition) {
+		PreparedStatement pstmt = null;
+		ResultSet rs = null;
+		resultList = new ArrayList<Result>();
+		try {
+			String query = "select city.cty_code, city.cty_name, country.co_name, region.reg_name,"
+					+ " city.population, city.iscoastal, city.areakm"
+					+ " from city"
+					+ " inner join country on city.co_code = country.co_code"
+					+ " inner join region on city.reg_code = region.reg_code"
+					+ " where city.population " + condition + " ?"
+					+ " and city.co_code = ?"
+					+ " and city.iscoastal = ?";
+			pstmt = conn.prepareStatement(query);
+			pstmt.setInt(1, city.getPopulation());
+			pstmt.setString(2, city.getCo_code());
+			pstmt.setBoolean(3, city.getIsCoastal());
+			System.out.println(pstmt.toString());
+			rs = pstmt.executeQuery();			
+			if(rs.next()) {
+				do {
+					Result result = new Result();
+					String cty_code = rs.getString("cty_code");
+					String cty_name = rs.getString("cty_name");
+					String co_name = rs.getString("co_name");
+					String reg_name = rs.getString("reg_name");				
+					int population = rs.getInt("population");
+					boolean isCoastal = rs.getBoolean("isCoastal");
+					double areaKM = rs.getDouble("areaKM");
+					result.setCty_code(cty_code);
+					result.setCty_name(cty_name);
+					result.setCo_name(co_name);
+					result.setReg_name(reg_name);					
+					result.setPopulation(population);
+					result.setIsCoastal(isCoastal);
+					result.setAreaKm(areaKM);
+					resultList.add(result);		
+				} while (rs.next());
+			}			
+		} catch (Exception e) {
+			System.out.println(e);
+		} finally {
+			try {
+				rs.close();
+				pstmt.close();
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
+		}
+		return resultList;
 	}
 	
 	// targetValue is which user wants to get from the source. ex) country name from the country table
@@ -369,10 +353,10 @@ public class GeographyDaoImpl implements GeographyDao {
 			pstmt = conn.prepareStatement(query);			
 			pstmt.setString(1, cty.getCty_code());
 			rs = pstmt.executeQuery();
-			if (rs != null) {
-				while (rs.next()) {					
+			if (rs.next()) {
+				do {					
 					output = rs.getString(1);
-				}
+				} while (rs.next());
 			}
 			else {
 				System.out.println("Result set is null");
@@ -381,6 +365,7 @@ public class GeographyDaoImpl implements GeographyDao {
 			System.out.println(e);
 		} finally {
 			try {
+				rs.close();
 				pstmt.close();
 			} catch (SQLException e) {
 				e.printStackTrace();
@@ -390,50 +375,7 @@ public class GeographyDaoImpl implements GeographyDao {
 	}
 
 	@Override
-	public City getCity(String code) {
-		PreparedStatement pstmt = null;
-		ResultSet rs = null;
-		City city = new City();
-		try {
-			String query = "select * from city where cty_code = ?";
-			pstmt = conn.prepareStatement(query);
-			pstmt.setString(1, code);
-			rs = pstmt.executeQuery();
-			if (rs != null) {
-				while (rs.next()) {
-					String cty_code = rs.getString("cty_code");
-					String co_code = rs.getString("co_code");
-					String reg_code = rs.getString("reg_code");
-					String cty_name = rs.getString("cty_name");
-					int population = rs.getInt("population");
-					boolean isCoastal = rs.getBoolean("isCoastal");
-					double areaKM = rs.getDouble("areaKM");
-					city.setCty_code(cty_code);
-					city.setCo_code(co_code);
-					city.setReg_code(reg_code);
-					city.setCty_name(cty_name);
-					city.setPopulation(population);
-					city.setIsCoastal(isCoastal);
-					city.setAreaKm(areaKM);
-				}
-			}
-			else {
-				System.out.println("Result set is null");
-			}
-		} catch (Exception e) {
-			System.out.println(e);
-		} finally {
-			try {
-				pstmt.close();
-			} catch (SQLException e) {
-				e.printStackTrace();
-			}
-		}
-		return city;
-	}
-
-	@Override
-	public void addCity(City city) {
+	public String addCity(City city) {
 		PreparedStatement pstmt = null;
 		try {
 			String query = "insert into city values(?, ?, ?, ?, ?, ?, ?)";
@@ -447,10 +389,10 @@ public class GeographyDaoImpl implements GeographyDao {
 			pstmt.setDouble(7, city.getAreaKm());
 			
 			int i = pstmt.executeUpdate();  
-			System.out.println(i+" records added");  
+			return i + " records added";  
 			
 		} catch (Exception e) {
-			System.out.println(e);
+			return e.getMessage();
 		} finally {
 			try {
 				pstmt.close();
@@ -461,7 +403,7 @@ public class GeographyDaoImpl implements GeographyDao {
 	}
 
 	@Override
-	public void updateCity(City city) {
+	public String updateCity(City city) {
 		PreparedStatement pstmt = null;
 		try {
 			String query = "update city set cty_name = ?, population = ?, isCostal = ?, areaKM = ? where cty_code = ?";
@@ -473,9 +415,9 @@ public class GeographyDaoImpl implements GeographyDao {
 			pstmt.setString(5, city.getCty_code());
 			
 			int i = pstmt.executeUpdate();  
-			System.out.println(i+" records updated");
+			return i + " records updated";
 		} catch (Exception e) {
-			System.out.println(e);
+			return e.getMessage();
 		} finally {
 			try {
 				pstmt.close();
@@ -487,7 +429,7 @@ public class GeographyDaoImpl implements GeographyDao {
 	}
 
 	@Override
-	public void deleteCity(City city) {
+	public String deleteCity(City city) {
 		PreparedStatement pstmt = null;
 		try {
 			String query = "delete from city where cty_code = ?";
@@ -495,9 +437,9 @@ public class GeographyDaoImpl implements GeographyDao {
 			pstmt.setString(1, city.getCty_code());
 			
 			int i = pstmt.executeUpdate();  
-			System.out.println(i+" records deleted");
+			return i + " records deleted";
 		} catch (Exception e) {
-			System.out.println(e);
+			return e.getMessage();
 		} finally {
 			try {
 				pstmt.close();

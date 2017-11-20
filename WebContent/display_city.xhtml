@@ -8,31 +8,34 @@
 	<title>Display City</title>
 	<h:outputStylesheet library = "css" name = "styles.css"  />
 </h:head>
-<h:body>
-
-	<h3>Full City Details</h3>
-	<br/>
-	<h:outputLabel for="cityCode">City Code: </h:outputLabel>
-	<h:outputText id="cityCode" value="#{cityCtrl.cty_code}"/>
-	<br/>
-	<h:outputLabel for="cityName">City Name: </h:outputLabel>
-	<h:outputText id="cityName" value="#{cityCtrl.cty_name}"/>
-	<br/>
-	<h:outputLabel for="countryName">Country: </h:outputLabel>
-	<h:outputText id="countryName" value="#{cityCtrl.co_name}"/>
-	<br/>
-	<h:outputLabel for="regionName">Region: </h:outputLabel>
-	<h:outputText id="regionName" value="#{cityCtrl.reg_name}"/>		
-	<br/>
-	<h:outputLabel for="cityPopulation">City Population: </h:outputLabel>
-	<h:outputText id="cityPopulation" value="#{cityCtrl.population}"/>
-	<br/>
-	<h:outputLabel for="cityIsCoastal">By The Sea: </h:outputLabel>
-	<h:outputText id="cityIsCoastal" value="#{cityCtrl.isCoastal}"/>
-	<br/>
-	<h:outputLabel for="cityAreaKm">Area (KM): </h:outputLabel>
-	<h:outputText id="cityAreaKm" value="#{cityCtrl.areaKm}"/>
-	<br/>
+<h:body>	
+	<h:form id="form">
+		<h3>Full City Details</h3>
+		<br/>
+		<h:outputLabel for="cityCode">City Code: </h:outputLabel>
+		<h:outputText id="cityCode" value="#{cityCtrl.cty_code}"/>
+		<br/>
+		<h:outputLabel for="cityName">City Name: </h:outputLabel>
+		<h:outputText id="cityName" value="#{cityCtrl.cty_name}"/>
+		<br/>
+		<h:outputLabel for="countryName">Country: </h:outputLabel>
+		<h:outputText id="countryName" value="#{cityCtrl.co_name}"/>
+		<br/>
+		<h:outputLabel for="regionName">Region: </h:outputLabel>
+		<h:outputText id="regionName" value="#{cityCtrl.reg_name}"/>		
+		<br/>
+		<h:outputLabel for="cityPopulation">City Population: </h:outputLabel>
+		<h:outputText id="cityPopulation" value="#{cityCtrl.population}"/>
+		<br/>
+		<h:outputLabel for="cityIsCoastal">By The Sea: </h:outputLabel>
+		<h:outputText id="cityIsCoastal" value="#{cityCtrl.isCoastal}"/>
+		<br/>
+		<h:outputLabel for="cityAreaKm">Area (KM): </h:outputLabel>
+		<h:outputText id="cityAreaKm" value="#{cityCtrl.areaKm}"/>
+		<br/>
+		<h:commandButton value="Delete" type="submit" action="#{cityCtrl.deleteCity}"/>
+		<br/>
+	</h:form>
 	<h:link value="Home" outcome="index"/>
 	<h:link value="Cities" outcome="list_cities"/>
 </h:body>

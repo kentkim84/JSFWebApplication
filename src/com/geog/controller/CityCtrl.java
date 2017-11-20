@@ -6,16 +6,19 @@ import java.util.ArrayList;
 import java.util.List;
 
 import javax.faces.bean.ManagedBean;
-//import javax.faces.bean.SessionScoped;
-import javax.faces.bean.RequestScoped;
+import javax.faces.bean.SessionScoped;
+//import javax.faces.bean.RequestScoped;
 
 @ManagedBean
-//@SessionScoped
-@RequestScoped
+@SessionScoped
+//@RequestScoped
 public class CityCtrl {
 	private GeographyDao geographyDao = new GeographyDaoImpl();
 	private List<City> cityList;
+	private List<Result> resultList;
 	private City city = new City();
+	private String condition;
+	private String returnMessage = new String();
 	
 	public CityCtrl() {
 	}
@@ -76,13 +79,19 @@ public class CityCtrl {
 	}
 	
 	public String getCo_name() {
-		System.out.println("get country name");
 		return geographyDao.getValueFromMultiTables(this.city, "co_name", "co_code", "country");
 	}
 	
 	public String getReg_name() {
-		System.out.println("get region name");
 		return geographyDao.getValueFromMultiTables(this.city, "reg_name", "reg_code", "region");
+	}
+	
+	public String getReturnMessage() {
+		return returnMessage;
+	}
+	
+	public void setReturnMessage(String errorMessage) {
+		this.returnMessage = errorMessage;
 	}
 	
 	public List<City> getCityList() {
@@ -91,29 +100,65 @@ public class CityCtrl {
 	}
 		
 	public String addCity(City city) {
-		this.city = city;
-		geographyDao.addCity(this.city);
+		geographyDao.addCity(city);
 		return "list_cities.xhtml";
 	}
 	
 	public String displayCity(City city) {
-		this.city = city;
 		this.city.setCty_code(city.getCty_code());
 		this.city.setCty_name(city.getCty_name());
 		// country and region name are executed from separated methods
 		this.city.setPopulation(city.getPopulation());
 		this.city.setIsCoastal(city.getIsCoastal());
 		this.city.setAreaKm(city.getAreaKm());
+		System.out.println(this.city.getCty_code());
 		return "display_city.xhtml";
 	}
 	
-	// not required methods
-	public String deleteCity(City city) {
-		this.city = city;
+	public String getCondition() {
+		return condition;
+	}
+	
+	public void setCondition(String condition) {
+		switch (condition) {
+		case "lt":
+			this.condition = "<";
+			break;
+		case "gt":
+			this.condition = ">";
+			break;
+		case "lte":
+			this.condition = "<=";
+			break;
+		case "gte":
+			this.condition = ">=";
+			break;
+		case "eq":
+			this.condition = "=";
+			break;
+		default:			
+			break;
+		}		
+	}
+	
+	public String searchCities(City city) {		
+		resultList = new ArrayList<Result>(geographyDao.searchCities(city, condition));		
+		return "find_result.xhtml";
+	}
+	
+	public List<Result> getResultList() {
+		return resultList;
+	}
+	
+	// release constraint
+	public String deleteCity() {				
+		System.out.println(this.city.getCty_code());
+		System.out.println(city.getCty_code());
 		geographyDao.deleteCity(city);
 		return "list_cities.xhtml";
 	}
-		
+	
+	// not required methods
 	public String updateCity() {		
 		geographyDao.updateCity(city);
 		return "list_cities.xhtml";

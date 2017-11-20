@@ -16,6 +16,7 @@ public class CountryCtrl {
 	private GeographyDao geographyDao = new GeographyDaoImpl();
 	private List<Country> countryList;
 	private Country country = new Country();
+	private String returnMessage = new String();
 
 	public CountryCtrl() {
 	}
@@ -44,20 +45,38 @@ public class CountryCtrl {
 		country.setCo_details(co_details);
 	}
 	
+	public String geReturnMessage() {
+		//System.out.println("get "+returnMessage);
+		return "returnMessage";
+	}
+	
+	public void setReturnMessage(String returnMessage) {
+		this.returnMessage = returnMessage;
+		//System.out.println("set "+returnMessage);
+	}
+	
 	public List<Country> getCountryList() {
 		countryList = new ArrayList<Country>(geographyDao.getAllCountries());
 		return countryList;
 	}
 	
 	public String addCountry(Country country) {
-		this.country = country;
-		geographyDao.addCountry(this.country);
+		geographyDao.addCountry(country);
 		return "list_countries.xhtml";
 	}
 	
-	public String deleteCountry(Country country) {
-		this.country = country;
-		geographyDao.deleteCountry(country);
+	public String deleteCountry(Country country) {	
+		returnMessage = geographyDao.deleteCountry(country);
+		if(returnMessage.contains("constraint")) {
+			System.out.println("A foreign key constraint fails: " + returnMessage);
+			this.setReturnMessage(returnMessage);
+		}
+		else {
+			System.out.println(returnMessage);
+			this.setReturnMessage("done");
+			
+		}
+		
 		return "list_countries.xhtml";
 	}
 		

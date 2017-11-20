@@ -12,26 +12,26 @@
 	<h:form id="form">
 		<h3>Find All Cities</h3>
 		<br/>  
-		<h:outputLabel for="population">Population</h:outputLabel>
-		<h:selectOneListbox value = "#{geography.popCondition}"> 
+		<h:outputLabel for="cityPopulation">Population: </h:outputLabel>
+		<h:selectOneMenu value = "#{cityCtrl.condition}"> 
 			<f:selectItem itemValue = "lt" itemLabel = "Less Than" /> 
 			<f:selectItem itemValue = "gt" itemLabel = "Greater Than" /> 
 			<f:selectItem itemValue = "lte" itemLabel = "Less Than or Equal to" /> 
 			<f:selectItem itemValue = "gte" itemLabel = "Greater Than or Equal to" /> 
 			<f:selectItem itemValue = "eq" itemLabel = "Equal to" />     
-		</h:selectOneListbox>
-		<h:inputText id="population" value="#{geography.population}"/>
+		</h:selectOneMenu>
+		<h:inputText id="cityPopulation" value="#{city.population}"/>
 		<br/>
-		<h:outputLabel for="countryCode">Country code</h:outputLabel>
-		<h:inputText id="countryCode" value="#{geography.co_code}"/>
+		<h:outputLabel for="countryCode">Country code: </h:outputLabel>
+		<h:inputText id="countryCode" value="#{city.co_code}"/>
 		<br/>
-		<h:outputLabel for="byTheSea">By The Sea</h:outputLabel>
-		<h:selectOneListbox value = "#{geography.seaCondition}"> 
+		<h:outputLabel for="byTheSea">By The Sea: </h:outputLabel>
+		<h:selectOneMenu id="byTheSea" value = "#{city.isCoastal}"> 
 			<f:selectItem itemValue = "true" itemLabel = "True" /> 
 			<f:selectItem itemValue = "false" itemLabel = "False" />     
-		</h:selectOneListbox>
+		</h:selectOneMenu>
 		<br/>
-		<h:commandButton value="Search" action="find_result"/>  
+		<h:commandButton value="Search" type="submit" action="#{cityCtrl.searchCities(city)}"/>  
 	</h:form> 
 	<h:link value="Home" outcome="index"/>
 </h:body>

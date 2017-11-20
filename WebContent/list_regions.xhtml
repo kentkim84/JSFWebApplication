@@ -36,6 +36,13 @@
 				<h:outputText value="#{region.reg_details}"/>
 			</h:column>
 			
+			<h:column>
+				<f:facet name = "header">Action</f:facet>
+				<h:commandButton value="Delete" type="submit" 
+					onclick="return confirm('Delete this Country?');"
+					action="#{regionCtrl.deleteRegion(region)}" />		
+			</h:column>
+			
 		</h:dataTable>
 	</h:form>
 	<h:link value="Home" outcome="index"/>

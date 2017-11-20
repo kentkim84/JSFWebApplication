@@ -6,23 +6,21 @@ import com.geog.model.*;
 public interface GeographyDao {
 	// Country section
 	public List<Country> getAllCountries();
-	public Country getCountry(String code);
-	public void addCountry(Country country);
-	public void updateCountry(Country country);
-	public void deleteCountry(Country country);
+	public String addCountry(Country country);
+	public String updateCountry(Country country);
+	public String deleteCountry(Country country);
 	// Region section
 	public List<Region> getAllRegions();
-	public Region getRegion(String code);
-	public void addRegion(Region region);
-	public void updateRegion(Region region);
-	public void deleteRegion(Region region);
+	public String addRegion(Region region);
+	public String updateRegion(Region region);
+	public String deleteRegion(Region region);
 	// City section
 	public List<City> getAllCities();
+	public List<Result> searchCities(City city, String condition);
 	public String getValueFromMultiTables(City cty, String targetValue, String commonValue, String source);
-	public City getCity(String code);
-	public void addCity(City city);
-	public void updateCity(City city);
-	public void deleteCity(City city);
+	public String addCity(City city);
+	public String updateCity(City city);
+	public String deleteCity(City city);
 	// State section
 	/*public List<State> getAllStates();
 	public State getState(String _id);

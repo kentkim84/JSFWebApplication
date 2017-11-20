@@ -16,7 +16,8 @@ public class RegionCtrl {
 	private GeographyDao geographyDao = new GeographyDaoImpl();
 	private List<Region> regionList;
 	private Region region = new Region();
-
+	private String returnMessage = new String();
+	
 	public RegionCtrl() {
 	}
 	
@@ -52,24 +53,31 @@ public class RegionCtrl {
 		region.setReg_details(reg_details);
 	}
 	
+	public String getReturnMessage() {
+		return returnMessage;
+	}
+	
+	public void setReturnMessage(String errorMessage) {
+		this.returnMessage = errorMessage;
+	}
+	
 	public List<Region> getRegionList() {
 		regionList = new ArrayList<Region>(geographyDao.getAllRegions());
 		return regionList;
 	}
 	
 	public String addRegion(Region region) {
-		this.region = region;
-		geographyDao.addRegion(this.region);
+		geographyDao.addRegion(region);
+		return "list_regions.xhtml";
+	}
+	
+	// release constraint
+	public String deleteRegion(Region region) {	
+		geographyDao.deleteRegion(region);
 		return "list_regions.xhtml";
 	}
 	
 	// not required methods
-	public String deleteRegion(Region region) {
-		this.region = region;
-		geographyDao.deleteRegion(region);
-		return "list_regions.xhtml";
-	}
-		
 	public String updateRegion() {		
 		geographyDao.updateRegion(region);
 		return "list_regions.xhtml";
