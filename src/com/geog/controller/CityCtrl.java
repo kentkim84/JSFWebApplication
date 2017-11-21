@@ -100,8 +100,13 @@ public class CityCtrl {
 	}
 		
 	public String addCity(City city) {
-		geographyDao.addCity(city);
-		return "list_cities.xhtml";
+		returnMessage = geographyDao.addCity(city);
+		if(returnMessage.contains("constraint")) {
+			return null;
+		}
+		else {
+			return "list_cities.xhtml";
+		}
 	}
 	
 	public String displayCity(City city) {

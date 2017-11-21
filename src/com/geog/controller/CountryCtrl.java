@@ -47,13 +47,11 @@ public class CountryCtrl {
 	}
 	
 	public String geReturnMessage() {
-		//System.out.println("get "+returnMessage);
 		return returnMessage;
 	}
 	
 	public void setReturnMessage(String returnMessage) {
 		this.returnMessage = returnMessage;
-		//System.out.println("set "+returnMessage);
 	}
 	
 	public List<Country> getCountryList() {
@@ -62,19 +60,20 @@ public class CountryCtrl {
 	}
 	
 	public String addCountry(Country country) {
-		geographyDao.addCountry(country);
-		return "list_countries.xhtml";
+		returnMessage = geographyDao.addCountry(country);
+		if(returnMessage.contains("Duplicate")) {
+			return null;
+		}
+		else {
+			return "list_countries.xhtml";
+		}		
 	}
 	
 	public String deleteCountry(Country country) {
 		returnMessage = geographyDao.deleteCountry(country);
-		if(returnMessage.contains("constraint")) {
-			System.out.println(returnMessage);
+		if(returnMessage.contains("constraint")) {			
+			return null;
 		}
-		else {
-			System.out.println(returnMessage);
-		}
-		
 		return "list_countries.xhtml";
 	}
 		

@@ -9,9 +9,9 @@
 	<h:outputStylesheet library = "css" name = "styles.css"  />
 </h:head>
 <h:body>
-	<h:form id="form">  
+	<h:form id="form">
 		<h:button value = "Add Country" outcome="add_country" />
-		<br/><br/>
+		<br/><br/>		
 		<br/>
 		<h:dataTable value = "#{countryCtrl.countryList}" var = "country"
 		           styleClass = "styleTable"
@@ -21,6 +21,7 @@
 			<h:column>    				
 				<f:facet name = "header">Country Code</f:facet>
 				<h:outputText value="#{country.co_code}"/>
+	
 			</h:column>
 			
 			<h:column>
@@ -37,7 +38,7 @@
 				<f:facet name = "header">Action</f:facet>
 				<!-- <h:button value = "Update" outcome="update_country" /> -->
 				<h:commandButton value="Update" type="submit"
-					action="#{countryCtrl.passValues(country)}" />	
+					action="#{countryCtrl.passValues(country)}" />
 				<br/>
 				<h:commandButton value="Delete" type="submit" 
 					onclick="return confirm('Delete this Country?');"

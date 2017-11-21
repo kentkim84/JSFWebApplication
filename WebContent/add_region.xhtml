@@ -9,11 +9,14 @@
 </h:head>
 <h:body>
 	<h:form id="form">
+		<h:messages globalOnly="true" styleClass="error" />	
 		<h3>Add Region</h3>
 		<br/>
-		<h:outputLabel for="countryCode">Country Code: </h:outputLabel>
-		<h:inputText id="countryCode" value="#{region.co_code}" required="true" requiredMessage="Country Code is required"/>
-		<h:message for="countryCode" style="color: red"/> 
+		<h:outputLabel for="countryCodeFromRegion">Country Code: </h:outputLabel>
+		<h:inputText id="countryCodeFromRegion" value="#{region.co_code}" required="true" requiredMessage="Country Code is required">
+			<f:validator validatorId="addDataValidator" />
+        </h:inputText>
+		<h:message for="countryCodeFromRegion" style="color: red"/> 
 		<br/>
 		<h:outputLabel for="regionCode">Region Code: </h:outputLabel>
 		<h:inputText id="regionCode" value="#{region.reg_code}" required="true" requiredMessage="Region Code is required"/>

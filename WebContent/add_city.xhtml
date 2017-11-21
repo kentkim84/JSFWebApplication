@@ -9,15 +9,18 @@
 </h:head>
 <h:body>
 	<h:form id="form">		
+		<h:messages globalOnly="true" styleClass="error" />
 		<h3>Add City</h3>
 		<br/>
 		<h:outputLabel for="cityCode">City Code: </h:outputLabel>
 		<h:inputText id="cityCode" value="#{city.cty_code}" required="true" requiredMessage="City Code is required"/>
 		<h:message for="cityCode" style="color: red"/>
 		<br/>
-		<h:outputLabel for="countryCode">Country Code: </h:outputLabel>
-		<h:inputText id="countryCode" value="#{city.co_code}" required="true" requiredMessage="Country Code is required"/>
-		<h:message for="countryCode" style="color: red"/> 
+		<h:outputLabel for="countryCodeFromCity">Country Code: </h:outputLabel>
+		<h:inputText id="countryCodeFromCity" value="#{city.co_code}" required="true" requiredMessage="Country Code is required">
+			<f:validator validatorId="addDataValidator" />
+        </h:inputText>
+		<h:message for="countryCodeFromCity" style="color: red"/> 
 		<br/>
 		<h:outputLabel for="regionCode">Region Code: </h:outputLabel>
 		<h:inputText id="regionCode" value="#{city.reg_code}" required="true" requiredMessage="Region Code is required"/>

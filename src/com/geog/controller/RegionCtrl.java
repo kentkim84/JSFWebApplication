@@ -67,8 +67,13 @@ public class RegionCtrl {
 	}
 	
 	public String addRegion(Region region) {
-		geographyDao.addRegion(region);
-		return "list_regions.xhtml";
+		returnMessage = geographyDao.addRegion(region);
+		if(returnMessage.contains("constraint")) {
+			return null;
+		}
+		else {
+			return "list_regions.xhtml";
+		}
 	}
 	
 	// release constraint

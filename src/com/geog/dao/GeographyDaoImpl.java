@@ -84,6 +84,7 @@ public class GeographyDaoImpl implements GeographyDao {
 			return j + " records added";  
 			
 		} catch (Exception e) {
+			e.printStackTrace();
 			System.out.println(e.getMessage());
 			return e.getMessage();
 		} finally {
