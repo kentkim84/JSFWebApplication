@@ -12,17 +12,17 @@
 	<h:form id="form">
 		<h3>Add Head of State</h3>
 		<br/>
-		<h:outputLabel for="countryCode">Country Code: </h:outputLabel>
-		<h:inputText id="countryCode" value="#{geography._id}" required="true" requiredMessage="Country Code is required"/>
-		<h:message for="countryCode" style="color: red"/> 
+		<h:outputLabel for="countryCodeFromState">Country Code: </h:outputLabel>
+		<h:inputText id="countryCodeFromState" value="#{state._id}" required="true" requiredMessage="Country Code is required"/>
+		<h:message for="countryCodeFromState" style="color: red"/> 
 		<br/>
 		<h:outputLabel for="headOfState">Head of State: </h:outputLabel>
-		<h:inputText id="headOfState" value="#{geography.co_name}" required="true" requiredMessage="Head of State is required"/>
+		<h:inputText id="headOfState" value="#{state.headOfState}" required="true" requiredMessage="Head of State is required"/>
 		<h:message for="headOfState" style="color: red"/>
 		<br/>
-		<h:commandButton value="Add" action="addHeadOfState()"/>  
+		<h:commandButton value="Add" type="submit" action="#{stateCtrl.addState(state)}"/>  
 	</h:form>
 	<h:link value="Home" outcome="index"/>
-	<h:link value="Countries" outcome="list_countries"/>
+	<h:link value="Heads of State" outcome="list_heads_of_state"/>
 </h:body>
 </html>

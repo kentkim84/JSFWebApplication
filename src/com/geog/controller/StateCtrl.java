@@ -52,7 +52,7 @@ public class StateCtrl {
 		}		
 	}
 	
-	public String deleteCountry(State state) {
+	public String deleteState(State state) {
 		returnMessage = geographyDao.deleteState(state);
 		if(returnMessage.contains("constraint")) {			
 			return null;

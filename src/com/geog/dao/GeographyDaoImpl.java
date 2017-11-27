@@ -529,23 +529,48 @@ public class GeographyDaoImpl implements GeographyDao {
 				
 		for (Document doc : iter) {	
 			System.out.println(doc.getString("_id")+"\n"+doc.getString("headOfState"));
+			// iterate the document object to add values into the state array list			
 			State state = new State();
 			String _id = doc.getString("_id");
 			String headOfState = doc.getString("headOfState");
-
 			state.set_id(_id);
-			state.setHeadOfState(headOfState);
-			
+			state.setHeadOfState(headOfState);			
 			stateList.add(state);
 		}
-
 		return stateList;
 	}
 	public String addState(State state) {
-		return null;
+		try {
+			if (state != null) {
+				Document doc = new Document()
+					.append("_id", state.get_id())
+					.append("headOfState", state.getHeadOfState());	            
+				headsOfState.insertOne(doc);
+				return "value added";
+		    }
+			else {
+				return "state is null";
+			}
+		} catch (Exception e) {
+			System.out.println(e.getMessage());
+			return e.getMessage();
+		}		
 	}
 	public String deleteState(State state) {
-		return null;
+		headsOfState.deleteOne(new Document("_id", state.get_id()));
+		try {
+			if (state != null) {
+				Document doc = new Document("_id", state.get_id());          
+				headsOfState.deleteOne(doc);
+				return "value removed";
+		    }
+			else {
+				return "state is null";
+			}
+		} catch (Exception e) {
+			System.out.println(e.getMessage());
+			return e.getMessage();
+		}
 	}
 	
 }
