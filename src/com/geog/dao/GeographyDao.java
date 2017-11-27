@@ -4,7 +4,10 @@ import java.util.List;
 import com.geog.model.*;
 
 public interface GeographyDao {
-	// Country section
+	// initialisation section
+	public void initSqlConnection();
+	public void initMongoConnection();
+	// Country section	
 	public List<Country> getAllCountries();
 	public String addCountry(Country country);
 	public String updateCountry(Country country, String srcCo_code);
@@ -22,9 +25,7 @@ public interface GeographyDao {
 	public String updateCity(City city);
 	public String deleteCity(City city);
 	// State section
-	/*public List<State> getAllStates();
-	public State getState(String _id);
-	public void addState(State state);
-	public void updateState(State state);
-	public void deleteState(State state);*/
+	public List<State> getAllStates();	
+	public String addState(State state);	
+	public String deleteState(State state);
 }

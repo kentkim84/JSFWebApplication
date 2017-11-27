@@ -10,30 +10,33 @@
 </h:head>
 <h:body>
 	<h:form id="form">
-		<h:button value = "Add Country" outcome="add_city" />
+		<h:button value = "Add Head of State" outcome="add_head_of_state" />
+	
+		<br/>
+		<h:dataTable value = "#{stateCtrl.stateList}" var = "state"
+		           styleClass = "styleTable"
+		           headerClass = "styleTableHeader"
+		           rowClasses = "styleTableOddRow,styleTableEvenRow">
+		           
+			<h:column>    				
+				<f:facet name = "header">Country Code</f:facet>		
+				<h:outputText value="#{state._id}"/>
+			</h:column>
+			
+			<h:column>    				
+				<f:facet name = "header">Head of State</f:facet>		
+				<h:outputText value="#{state.headOfState}"/>
+			</h:column>
+			
+			<h:column>
+				<f:facet name = "header">Action</f:facet>
+				<h:commandButton value="Delete" type="submit" 
+					onclick="return confirm('Delete this Head of State?');"
+					action="#{stateCtrl.deleteState(state)}" />	
+			</h:column>
+			
+		</h:dataTable>
 	</h:form>
-	<br/>
-	<h:dataTable value = "#{geography.states}" var = "state"
-	           styleClass = "styleTable"
-	           headerClass = "styleTableHeader"
-	           rowClasses = "styleTableOddRow,styleTableEvenRow">
-	           
-		<h:column>    				
-			<f:facet name = "header">Country Code</f:facet>		
-			#{state._id}
-		</h:column>
-		
-		<h:column>    				
-			<f:facet name = "header">Head of State</f:facet>		
-			#{state.headOfState}
-		</h:column>
-		
-		<h:column>
-			<f:facet name = "header">Action</f:facet>
-			<h:commandButton value = "Delete" onclick = "alert('Delete');" />
-		</h:column>
-		
-	</h:dataTable>
 	<h:link value="Home" outcome="index"/>
 </h:body>
 </html>

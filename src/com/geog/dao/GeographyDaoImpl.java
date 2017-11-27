@@ -1,23 +1,58 @@
 package com.geog.dao;
-
+// import sql libraries
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import com.mysql.jdbc.jdbc2.optional.MysqlDataSource;
+//import mongodb libraries
+import com.mongodb.MongoClient;
+import com.mongodb.client.MongoDatabase;
+import com.mongodb.client.FindIterable;
+import com.mongodb.client.MongoCollection;
+import org.bson.Document;
+import org.bson.codecs.BsonArrayCodec;
+import org.bson.codecs.BsonValueCodecProvider;
+import org.bson.codecs.DocumentCodecProvider;
+import org.bson.codecs.ValueCodecProvider;
+import org.bson.codecs.configuration.CodecRegistries;
+import org.bson.codecs.configuration.CodecRegistry;
+import org.bson.json.JsonReader;
+
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 import com.geog.model.*;
-import com.mysql.jdbc.jdbc2.optional.MysqlDataSource;
 
 public class GeographyDaoImpl implements GeographyDao {
 	private Connection conn;
+	private MongoCollection<Document> headsOfState;
 	private List<Country> countryList;
 	private List<Region> regionList;
 	private List<City> cityList;
 	private List<Result> resultList;
+	private List<State> stateList;
 	
 	public GeographyDaoImpl() {
+		/*try {
+			// establish a connection
+			MysqlDataSource mysqlDS = new MysqlDataSource();
+			String url = "jdbc:mysql://localhost:3306/geography";
+			mysqlDS.setURL(url);
+			mysqlDS.setUser("root");
+			mysqlDS.setPassword("");			
+			conn = mysqlDS.getConnection();
+			System.out.println(conn);
+		} catch (Exception e) {
+			System.out.println(e);
+		}*/
+		// initialise the mySql connection
+		initSqlConnection();
+		initMongoConnection();
+	}
+	
+	public void initSqlConnection() {
 		try {
 			// establish a connection
 			MysqlDataSource mysqlDS = new MysqlDataSource();
@@ -29,6 +64,17 @@ public class GeographyDaoImpl implements GeographyDao {
 			System.out.println(conn);
 		} catch (Exception e) {
 			System.out.println(e);
+		}
+	}
+	
+	public void initMongoConnection() {
+		// establish a connection
+		MongoClient mongoClient = new MongoClient();		
+		MongoDatabase database = mongoClient.getDatabase("headsOfStateDB");
+		headsOfState =  database.getCollection("headsOfState");
+		
+		for (String name : database.listCollectionNames()) {
+		    System.out.println("List name: " + name);
 		}
 	}
 	
@@ -473,6 +519,33 @@ public class GeographyDaoImpl implements GeographyDao {
 				e.printStackTrace();
 			}
 		}
+	}
+	
+	@Override
+	public List<State> getAllStates() {		
+		stateList = new ArrayList<State>();
+		// Getting the iterable object
+		FindIterable<Document> iter = headsOfState.find();
+				
+		for (Document doc : iter) {	
+			System.out.println(doc.getString("_id")+"\n"+doc.getString("headOfState"));
+			State state = new State();
+			String _id = doc.getString("_id");
+			String headOfState = doc.getString("headOfState");
+
+			state.set_id(_id);
+			state.setHeadOfState(headOfState);
+			
+			stateList.add(state);
+		}
+
+		return stateList;
+	}
+	public String addState(State state) {
+		return null;
+	}
+	public String deleteState(State state) {
+		return null;
 	}
 	
 }
