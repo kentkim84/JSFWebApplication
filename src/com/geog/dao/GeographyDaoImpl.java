@@ -1,27 +1,21 @@
 package com.geog.dao;
-// import sql libraries
+// sql libraries
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import com.mysql.jdbc.jdbc2.optional.MysqlDataSource;
-//import mongodb libraries
+//mongodb libraries
 import com.mongodb.MongoClient;
+import com.mongodb.MongoException;
+import com.mongodb.WriteConcernException;
 import com.mongodb.client.MongoDatabase;
 import com.mongodb.client.FindIterable;
 import com.mongodb.client.MongoCollection;
 import org.bson.Document;
-import org.bson.codecs.BsonArrayCodec;
-import org.bson.codecs.BsonValueCodecProvider;
-import org.bson.codecs.DocumentCodecProvider;
-import org.bson.codecs.ValueCodecProvider;
-import org.bson.codecs.configuration.CodecRegistries;
-import org.bson.codecs.configuration.CodecRegistry;
-import org.bson.json.JsonReader;
-
+// utilities and model package 
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
 import com.geog.model.*;
 
@@ -35,19 +29,7 @@ public class GeographyDaoImpl implements GeographyDao {
 	private List<State> stateList;
 	
 	public GeographyDaoImpl() {
-		/*try {
-			// establish a connection
-			MysqlDataSource mysqlDS = new MysqlDataSource();
-			String url = "jdbc:mysql://localhost:3306/geography";
-			mysqlDS.setURL(url);
-			mysqlDS.setUser("root");
-			mysqlDS.setPassword("");			
-			conn = mysqlDS.getConnection();
-			System.out.println(conn);
-		} catch (Exception e) {
-			System.out.println(e);
-		}*/
-		// initialise the mySql connection
+		// initialise the db connections
 		initSqlConnection();
 		initMongoConnection();
 	}
@@ -73,6 +55,7 @@ public class GeographyDaoImpl implements GeographyDao {
 		MongoDatabase database = mongoClient.getDatabase("headsOfStateDB");
 		headsOfState =  database.getCollection("headsOfState");
 		
+		// display the list of collections
 		for (String name : database.listCollectionNames()) {
 		    System.out.println("List name: " + name);
 		}
@@ -524,19 +507,23 @@ public class GeographyDaoImpl implements GeographyDao {
 	@Override
 	public List<State> getAllStates() {		
 		stateList = new ArrayList<State>();
-		// Getting the iterable object
-		FindIterable<Document> iter = headsOfState.find();
-				
-		for (Document doc : iter) {	
-			System.out.println(doc.getString("_id")+"\n"+doc.getString("headOfState"));
-			// iterate the document object to add values into the state array list			
-			State state = new State();
-			String _id = doc.getString("_id");
-			String headOfState = doc.getString("headOfState");
-			state.set_id(_id);
-			state.setHeadOfState(headOfState);			
-			stateList.add(state);
-		}
+		
+		try {
+			// Getting the iterable object
+			FindIterable<Document> iter = headsOfState.find();
+			for (Document doc : iter) {	
+				System.out.println(doc.getString("_id")+"\n"+doc.getString("headOfState"));
+				// iterate the document object to add values into the state array list			
+				State state = new State();
+				String _id = doc.getString("_id");
+				String headOfState = doc.getString("headOfState");
+				state.set_id(_id);
+				state.setHeadOfState(headOfState);			
+				stateList.add(state);
+			}			
+		} catch (WriteConcernException  e) {
+			System.out.println(e.getMessage());			
+		}		
 		return stateList;
 	}
 	public String addState(State state) {
@@ -551,23 +538,17 @@ public class GeographyDaoImpl implements GeographyDao {
 			else {
 				return "state is null";
 			}
-		} catch (Exception e) {
+		} catch (MongoException e) {
 			System.out.println(e.getMessage());
 			return e.getMessage();
 		}		
 	}
-	public String deleteState(State state) {
-		headsOfState.deleteOne(new Document("_id", state.get_id()));
+	public String deleteState(State state) {		
 		try {
-			if (state != null) {
-				Document doc = new Document("_id", state.get_id());          
-				headsOfState.deleteOne(doc);
-				return "value removed";
-		    }
-			else {
-				return "state is null";
-			}
-		} catch (Exception e) {
+			Document doc = new Document("_id", state.get_id());          
+			headsOfState.deleteOne(doc);
+			return "value removed";
+		} catch (WriteConcernException  e) {
 			System.out.println(e.getMessage());
 			return e.getMessage();
 		}

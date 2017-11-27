@@ -59,9 +59,5 @@ public class StateCtrl {
 		}
 		return "list_heads_of_state.xhtml";
 	}
-	
-	
-
-	
 
 }
