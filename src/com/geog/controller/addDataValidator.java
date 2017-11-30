@@ -19,14 +19,18 @@ public class addDataValidator implements Validator {
 	public void validate(FacesContext context, UIComponent component, Object value) throws ValidatorException {	
 		FacesMessage message;
 		
+		// validate country code from different controls
+		// adding the new country data
 		if (component.getClientId().contains("countryCodeFromCountry")) {
 			message = new FacesMessage("Error: Country Code: " + value.toString() + " already exists");
 			FacesContext.getCurrentInstance().addMessage(null, message);
 		}
+		// adding the new region data
 		else if (component.getClientId().contains("countryCodeFromRegion")) {
 			message = new FacesMessage("Error: Country Code: " + value.toString() + " does not exist");
 			FacesContext.getCurrentInstance().addMessage(null, message);
 		}
+		// adding the new city data
 		else if (component.getClientId().contains("countryCodeFromCity")) {			
 			Object cityCodeValue = ((UIInput) context.getViewRoot().findComponent("form:cityCode")).getSubmittedValue();
 			if(cityCodeValue == null) {
@@ -37,6 +41,11 @@ public class addDataValidator implements Validator {
 			message = new FacesMessage("Error: attempting to add Country: " + value.toString()
 					+ ", Region: " + regionCodeValue.toString()
 					+ " and City: " + cityCodeValue.toString());
+			FacesContext.getCurrentInstance().addMessage(null, message);
+		}
+		// adding the new state data
+		else if (component.getClientId().contains("countryCodeFromState")) {
+			message = new FacesMessage("Error: Country Code: " + value.toString() + " does not exist");
 			FacesContext.getCurrentInstance().addMessage(null, message);
 		}
 

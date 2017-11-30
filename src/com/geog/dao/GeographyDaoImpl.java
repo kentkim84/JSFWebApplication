@@ -42,22 +42,32 @@ public class GeographyDaoImpl implements GeographyDao {
 			mysqlDS.setURL(url);
 			mysqlDS.setUser("root");
 			mysqlDS.setPassword("");			
-			conn = mysqlDS.getConnection();
-			System.out.println(conn);
+			conn = mysqlDS.getConnection();			
+		} catch (SQLException se) {	
+			// handle sql errors
+			se.printStackTrace();
 		} catch (Exception e) {
-			System.out.println(e);
+			// handle class errors
+			e.printStackTrace();
 		}
 	}
 	
 	public void initMongoConnection() {
-		// establish a connection
-		MongoClient mongoClient = new MongoClient();		
-		MongoDatabase database = mongoClient.getDatabase("headsOfStateDB");
-		headsOfState =  database.getCollection("headsOfState");
-		
-		// display the list of collections
-		for (String name : database.listCollectionNames()) {
-		    System.out.println("List name: " + name);
+		try {
+			// establish a connection
+			MongoClient mongoClient = new MongoClient();		
+			MongoDatabase database = mongoClient.getDatabase("headsOfStateDB");
+			headsOfState =  database.getCollection("headsOfState");
+			// display the list of collections
+			for (String name : database.listCollectionNames()) {
+			    System.out.println("List name: " + name);
+			}
+		} catch (MongoException me) {
+			// handle mongodb errors
+			me.printStackTrace();
+		} catch (Exception e) {
+			// handle class errors
+			e.printStackTrace();
 		}
 	}
 	
@@ -82,11 +92,8 @@ public class GeographyDaoImpl implements GeographyDao {
 					countryList.add(country);
 				} while (rs.next());
 			}
-			else {
-				System.out.println("Result set is null");
-			}
 		} catch (Exception e) {
-			System.out.println(e.getMessage());
+			e.printStackTrace();
 		} finally {
 			try {
 				rs.close();
@@ -107,14 +114,11 @@ public class GeographyDaoImpl implements GeographyDao {
 			pstmt = conn.prepareStatement(query);
 			pstmt.setString(++i, country.getCo_code());
 			pstmt.setString(++i, country.getCo_name());
-			pstmt.setString(++i, country.getCo_details());
-			
-			int j = pstmt.executeUpdate();  
-			return j + " records added";  
-			
+			pstmt.setString(++i, country.getCo_details());			
+			int j = pstmt.executeUpdate();
+			return j + " Country records added";
 		} catch (Exception e) {
-			e.printStackTrace();
-			System.out.println(e.getMessage());
+			e.printStackTrace();	
 			return e.getMessage();
 		} finally {
 			try {			
@@ -122,7 +126,7 @@ public class GeographyDaoImpl implements GeographyDao {
 			} catch (SQLException e) {
 				e.printStackTrace();
 			}
-		}		
+		}
 	}
 
 	@Override
@@ -137,9 +141,9 @@ public class GeographyDaoImpl implements GeographyDao {
 			pstmt.setString(++i, country.getCo_details());
 			pstmt.setString(++i, srcCo_code);	
 			int j = pstmt.executeUpdate();  
-			return j + " records updated";
+			return j + " Country records updated";
 		} catch (Exception e) {
-			System.out.println(e.getMessage());
+			e.printStackTrace();
 			return e.getMessage();
 		} finally {
 			try {				
@@ -157,12 +161,11 @@ public class GeographyDaoImpl implements GeographyDao {
 			int i = 0;
 			String query = "delete from country where co_code = ?";
 			pstmt = conn.prepareStatement(query);
-			pstmt.setString(++i, country.getCo_code());
-			
+			pstmt.setString(++i, country.getCo_code());			
 			int j = pstmt.executeUpdate();  
-			return j + " records deleted";
+			return j + " Country records deleted";
 		} catch (Exception e) {
-			System.out.println(e.getMessage());
+			e.printStackTrace();
 			return e.getMessage();
 		} finally {
 			try {				
@@ -196,11 +199,8 @@ public class GeographyDaoImpl implements GeographyDao {
 					regionList.add(region);
 				} while (rs.next());
 			}
-			else {
-				System.out.println("Result set is null");
-			}
 		} catch (Exception e) {
-			System.out.println(e.getMessage());
+			e.printStackTrace();
 		} finally {
 			try {
 				rs.close();
@@ -222,13 +222,11 @@ public class GeographyDaoImpl implements GeographyDao {
 			pstmt.setString(++i, region.getCo_code());
 			pstmt.setString(++i, region.getReg_code());
 			pstmt.setString(++i, region.getReg_name());
-			pstmt.setString(++i, region.getReg_details());
-			
+			pstmt.setString(++i, region.getReg_details());			
 			int j = pstmt.executeUpdate();  
-			return j + " records added";  
-			
+			return j + " Region records added";  			
 		} catch (Exception e) {
-			System.out.println(e.getMessage());
+			e.printStackTrace();
 			return e.getMessage();
 		} finally {
 			try {
@@ -248,12 +246,11 @@ public class GeographyDaoImpl implements GeographyDao {
 			pstmt = conn.prepareStatement(query);
 			pstmt.setString(++i, region.getReg_name());
 			pstmt.setString(++i, region.getReg_details());
-			pstmt.setString(++i, region.getReg_code());
-			
+			pstmt.setString(++i, region.getReg_code());			
 			int j = pstmt.executeUpdate();  
-			return j + " records updated";
+			return j + " Region records updated";
 		} catch (Exception e) {
-			System.out.println(e.getMessage());
+			e.printStackTrace();
 			return e.getMessage();
 		} finally {
 			try {
@@ -271,12 +268,11 @@ public class GeographyDaoImpl implements GeographyDao {
 			int i = 0;
 			String query = "delete from region where reg_code = ?";
 			pstmt = conn.prepareStatement(query);
-			pstmt.setString(++i, region.getReg_code());
-			
+			pstmt.setString(++i, region.getReg_code());			
 			int j = pstmt.executeUpdate();  
-			return j + " records deleted";
+			return j + " Region records deleted";
 		} catch (Exception e) {
-			System.out.println(e.getMessage());
+			e.printStackTrace();
 			return e.getMessage();
 		} finally {
 			try {
@@ -316,11 +312,8 @@ public class GeographyDaoImpl implements GeographyDao {
 					cityList.add(city);
 				} while (rs.next());
 			}
-			else {
-				System.out.println("Result set is null");
-			}
 		} catch (Exception e) {
-			System.out.println(e.getMessage());
+			e.printStackTrace();
 		} finally {
 			try {
 				rs.close();
@@ -354,7 +347,7 @@ public class GeographyDaoImpl implements GeographyDao {
 			pstmt.setInt(++i, city.getPopulation());
 			if (!city.getCo_code().isEmpty()) {
 				pstmt.setString(++i, city.getCo_code());				
-			}			
+			}
 			pstmt.setString(++i, String.valueOf(city.getIsCoastal()));			
 			rs = pstmt.executeQuery();			
 			if(rs.next()) {
@@ -378,7 +371,7 @@ public class GeographyDaoImpl implements GeographyDao {
 				} while (rs.next());
 			}			
 		} catch (Exception e) {
-			System.out.println(e.getMessage());
+			e.printStackTrace();
 		} finally {
 			try {
 				rs.close();
@@ -407,11 +400,8 @@ public class GeographyDaoImpl implements GeographyDao {
 					output = rs.getString(1);
 				} while (rs.next());
 			}
-			else {
-				System.out.println("Result set is null");
-			}
 		} catch (Exception e) {
-			System.out.println(e.getMessage());
+			e.printStackTrace();
 		} finally {
 			try {
 				rs.close();
@@ -436,13 +426,11 @@ public class GeographyDaoImpl implements GeographyDao {
 			pstmt.setString(++i, city.getCty_name());
 			pstmt.setInt(++i, city.getPopulation());
 			pstmt.setString(++i, String.valueOf(city.getIsCoastal()));
-			pstmt.setDouble(++i, city.getAreaKm());
-			
+			pstmt.setDouble(++i, city.getAreaKm());			
 			int j = pstmt.executeUpdate();  
-			return j + " records added";  
-			
+			return j + " City records added";  
 		} catch (Exception e) {
-			System.out.println(e.getMessage());
+			e.printStackTrace();
 			return e.getMessage();
 		} finally {
 			try {
@@ -465,11 +453,10 @@ public class GeographyDaoImpl implements GeographyDao {
 			pstmt.setString(++i, String.valueOf(city.getIsCoastal()));
 			pstmt.setDouble(++i, city.getAreaKm());
 			pstmt.setString(++i, city.getCty_code());
-			
 			int j = pstmt.executeUpdate();  
-			return j + " records updated";
+			return j + " City records updated";
 		} catch (Exception e) {
-			System.out.println(e.getMessage());
+			e.printStackTrace();
 			return e.getMessage();
 		} finally {
 			try {
@@ -478,7 +465,6 @@ public class GeographyDaoImpl implements GeographyDao {
 				e.printStackTrace();
 			}
 		}
-		
 	}
 
 	@Override
@@ -488,10 +474,9 @@ public class GeographyDaoImpl implements GeographyDao {
 			int i = 0;
 			String query = "delete from city where cty_code = ?";
 			pstmt = conn.prepareStatement(query);
-			pstmt.setString(++i, city.getCty_code());
-			
+			pstmt.setString(++i, city.getCty_code());			
 			int j = pstmt.executeUpdate();  
-			return j + " records deleted";
+			return j + " City records deleted";
 		} catch (Exception e) {
 			System.out.println(e.getMessage());
 			return e.getMessage();
@@ -506,8 +491,7 @@ public class GeographyDaoImpl implements GeographyDao {
 	
 	@Override
 	public List<State> getAllStates() {		
-		stateList = new ArrayList<State>();
-		
+		stateList = new ArrayList<State>();		
 		try {
 			// Getting the iterable object
 			FindIterable<Document> iter = headsOfState.find();
@@ -521,35 +505,38 @@ public class GeographyDaoImpl implements GeographyDao {
 				state.setHeadOfState(headOfState);			
 				stateList.add(state);
 			}			
-		} catch (WriteConcernException  e) {
-			System.out.println(e.getMessage());			
+		} catch (MongoException e) {
+			e.printStackTrace();	
 		}		
 		return stateList;
 	}
 	public String addState(State state) {
 		try {
+			String result = null;
 			if (state != null) {
 				Document doc = new Document()
 					.append("_id", state.get_id())
 					.append("headOfState", state.getHeadOfState());	            
 				headsOfState.insertOne(doc);
-				return "value added";
+				result = "Head of State records added";
 		    }
-			else {
-				return "state is null";
-			}
+			return result;
 		} catch (MongoException e) {
-			System.out.println(e.getMessage());
+			e.printStackTrace();
 			return e.getMessage();
 		}		
 	}
 	public String deleteState(State state) {		
 		try {
-			Document doc = new Document("_id", state.get_id());          
-			headsOfState.deleteOne(doc);
-			return "value removed";
+			String result = null;
+			if (state != null) {
+				Document doc = new Document("_id", state.get_id());          
+				headsOfState.deleteOne(doc);
+				result = "Head of State records deleted";
+			}			
+			return result;
 		} catch (WriteConcernException  e) {
-			System.out.println(e.getMessage());
+			e.printStackTrace();
 			return e.getMessage();
 		}
 	}

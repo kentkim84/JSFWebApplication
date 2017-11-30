@@ -15,6 +15,7 @@ import javax.faces.bean.SessionScoped;
 public class StateCtrl {
 	private GeographyDao geographyDao = new GeographyDaoImpl();
 	private List<State> stateList;
+	private List<Country> countryList;
 	private State state = new State();
 	private String returnMessage = new String();
 	
@@ -43,13 +44,25 @@ public class StateCtrl {
 	}
 	
 	public String addState(State state) {
-		returnMessage = geographyDao.addState(state);
-		if(returnMessage.contains("Duplicate")) {
-			return null;
+		countryList = geographyDao.getAllCountries();
+		boolean _idFound = false;
+		for (Country country : countryList) {
+			System.out.println("iteration: " + country.getCo_code() + " " + country.getCo_name());
+			if (state.get_id().equalsIgnoreCase(country.getCo_code())) {
+				// handle the error, cannot add this state records
+				_idFound = true;
+				System.out.println("found: " + state.get_id());
+			}
+		}		
+		if(_idFound == true) {			
+			System.out.println("Cannot add " + state.get_id());
+			geographyDao.addState(state);
+			return "list_heads_of_state.xhtml";			
 		}
 		else {
-			return "list_heads_of_state.xhtml";
-		}		
+			System.out.println("Cannot add ");
+			return null;
+		}
 	}
 	
 	public String deleteState(State state) {

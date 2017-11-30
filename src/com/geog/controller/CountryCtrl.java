@@ -62,9 +62,11 @@ public class CountryCtrl {
 	public String addCountry(Country country) {
 		returnMessage = geographyDao.addCountry(country);
 		if(returnMessage.contains("Duplicate")) {
+			System.out.println(returnMessage);
 			return null;
 		}
 		else {
+			System.out.println(returnMessage);
 			return "list_countries.xhtml";
 		}		
 	}
