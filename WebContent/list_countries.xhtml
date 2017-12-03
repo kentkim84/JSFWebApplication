@@ -9,11 +9,14 @@
 	<h:outputStylesheet library = "css" name = "styles.css"  />
 </h:head>
 <h:body>
+	<f:metadata>	
+		<f:event type="preRenderView" listener="#{countryCtrl.onload}" />		
+	</f:metadata>		
 	<h:form id="form">
+		<h:messages globalOnly="true" styleClass="error" />		
 		<h:button value = "Add Country" outcome="add_country" />
 		<br/><br/>		
-		<br/>
-		<h:dataTable value = "#{countryCtrl.countryList}" var = "country"
+		<h:dataTable id="countryDT" value = "#{countryCtrl.countryList}" var = "country"
 		           styleClass = "styleTable"
 		           headerClass = "styleTableHeader"
 		           rowClasses = "styleTableOddRow,styleTableEvenRow">

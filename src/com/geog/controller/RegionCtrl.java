@@ -2,23 +2,38 @@ package com.geog.controller;
 
 import com.geog.dao.*;
 import com.geog.model.*;
+
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.SessionScoped;
-//import javax.faces.bean.RequestScoped;
+import javax.faces.context.FacesContext;
 
 @ManagedBean
 @SessionScoped
-//@RequestScoped
 public class RegionCtrl {
-	private GeographyDao geographyDao = new GeographyDaoImpl();
+	private GeographyDao geographyDao;
 	private List<Region> regionList;
-	private Region region = new Region();
-	private String returnMessage = new String();
+	private Region region;	
 	
 	public RegionCtrl() {
+	}
+	
+	public void onload() {
+		try {
+			region = new Region();
+			geographyDao = new GeographyDaoImpl();			
+			regionList = new ArrayList<Region>(geographyDao.getAllRegions());		
+		} catch (Exception e) {
+			e.printStackTrace();
+			if (e.getMessage().contains("Connection") || e.getMessage().contains("Communication")) {
+				FacesMessage message = new FacesMessage("Error: SQL Database Connection Failed");
+				FacesContext.getCurrentInstance().addMessage(null, message);
+			}
+		}		
 	}
 	
 	public String getCo_code() {
@@ -52,40 +67,42 @@ public class RegionCtrl {
 	public void setReg_details(String reg_details) {
 		region.setReg_details(reg_details);
 	}
-	
-	public String getReturnMessage() {
-		return returnMessage;
-	}
-	
-	public void setReturnMessage(String errorMessage) {
-		this.returnMessage = errorMessage;
-	}
-	
+
 	public List<Region> getRegionList() {
-		regionList = new ArrayList<Region>(geographyDao.getAllRegions());
 		return regionList;
 	}
 	
 	public String addRegion(Region region) {
-		returnMessage = geographyDao.addRegion(region);
-		if(returnMessage.contains("constraint")) {
-			return null;
-		}
-		else {
+		try {
+			geographyDao.addRegion(region);
 			return "list_regions.xhtml";
+		} catch (Exception e) {
+			e.printStackTrace();
+			return null;
 		}
 	}
 	
 	// release constraint
-	public String deleteRegion(Region region) {	
-		geographyDao.deleteRegion(region);
-		return "list_regions.xhtml";
+	public String deleteRegion(Region region) {
+		try {
+			geographyDao.deleteRegion(region);
+			return "list_regions.xhtml";
+		} catch (Exception e) {
+			e.printStackTrace();
+			return null;
+		}
+		
 	}
 	
 	// not required methods
 	public String updateRegion() {		
-		geographyDao.updateRegion(region);
-		return "list_regions.xhtml";
+		try {
+			geographyDao.updateRegion(region);
+			return "list_regions.xhtml";
+		} catch (Exception e) {
+			e.printStackTrace();
+			return null;
+		}
 	}
 	
 	public String passValues(Region region) {

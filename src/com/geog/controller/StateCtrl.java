@@ -2,25 +2,44 @@ package com.geog.controller;
 
 import com.geog.dao.*;
 import com.geog.model.*;
+
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.SessionScoped;
-//import javax.faces.bean.RequestScoped;
+import javax.faces.context.FacesContext;
 
 @ManagedBean
 @SessionScoped
-//@RequestScoped
 public class StateCtrl {
-	private GeographyDao geographyDao = new GeographyDaoImpl();
+	private HeadOfStateDao headOfStateDao;
+	private GeographyDao geographyDao;
 	private List<State> stateList;
 	private List<Country> countryList;
-	private State state = new State();
-	private String returnMessage = new String();
+	private State state;	
 	
 	public StateCtrl() {
 	}
+	
+	public void onload() {
+		try {			
+			state = new State();
+			headOfStateDao = new HeadOfStateImpl();
+			geographyDao = new GeographyDaoImpl();
+			stateList = new ArrayList<State>(headOfStateDao.getAllStates());
+			countryList = new ArrayList<Country>(geographyDao.getAllCountries());		
+		} catch (Exception e) { 
+			e.printStackTrace();
+			if (e.getMessage().contains("Connection")) {
+				FacesMessage message = new FacesMessage("Error: Mongo Database Connection Failed");
+				FacesContext.getCurrentInstance().addMessage(null, message);
+			}
+		}
+	}
+	
+	
 	
 	public String get_id() {
 		return state.get_id();
@@ -39,12 +58,16 @@ public class StateCtrl {
 	}
 	
 	public List<State> getStateList() {
-		stateList = new ArrayList<State>(geographyDao.getAllStates());
 		return stateList;
 	}
 	
 	public String addState(State state) {
-		countryList = geographyDao.getAllCountries();
+		/*try {
+			
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}*/
 		boolean _idFound = false;
 		for (Country country : countryList) {
 			System.out.println("iteration: " + country.getCo_code() + " " + country.getCo_name());
@@ -56,7 +79,11 @@ public class StateCtrl {
 		}		
 		if(_idFound == true) {			
 			System.out.println("Cannot add " + state.get_id());
-			geographyDao.addState(state);
+			try {
+				headOfStateDao.addState(state);
+			} catch (Exception e) {				
+				e.printStackTrace();
+			}
 			return "list_heads_of_state.xhtml";			
 		}
 		else {
@@ -66,11 +93,12 @@ public class StateCtrl {
 	}
 	
 	public String deleteState(State state) {
-		returnMessage = geographyDao.deleteState(state);
-		if(returnMessage.contains("constraint")) {			
+		try {
+			headOfStateDao.deleteState(state);
+			return "list_heads_of_state.xhtml";
+		} catch (Exception e) {
 			return null;
 		}
-		return "list_heads_of_state.xhtml";
 	}
 
 }

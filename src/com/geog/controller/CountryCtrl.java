@@ -2,24 +2,40 @@ package com.geog.controller;
 
 import com.geog.dao.*;
 import com.geog.model.*;
+
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.SessionScoped;
-//import javax.faces.bean.RequestScoped;
+import javax.faces.context.FacesContext;
+
 
 @ManagedBean
 @SessionScoped
-//@RequestScoped
 public class CountryCtrl {
-	private GeographyDao geographyDao = new GeographyDaoImpl();
+	private GeographyDao geographyDao;
 	private List<Country> countryList;
-	private Country country = new Country();
-	private String returnMessage = new String();
-	private String srcCo_code;
+	private Country country;	
+	private String srcCo_code;	
 
 	public CountryCtrl() {
+	}
+	
+	public void onload() {
+		try {
+			country = new Country();
+			geographyDao = new GeographyDaoImpl();									
+			countryList = new ArrayList<Country>(geographyDao.getAllCountries());			
+		} catch (Exception e) {			
+			e.printStackTrace();
+			// connection error handling
+			if (e.getMessage().contains("Connection") || e.getMessage().contains("Communication")) {
+				FacesMessage message = new FacesMessage("Error: SQL Database Connection Failed");
+				FacesContext.getCurrentInstance().addMessage(null, message);
+			}		
+		}		
 	}
 	
 	public String getCo_code() {
@@ -46,42 +62,48 @@ public class CountryCtrl {
 		country.setCo_details(co_details);
 	}
 	
-	public String geReturnMessage() {
-		return returnMessage;
-	}
-	
-	public void setReturnMessage(String returnMessage) {
-		this.returnMessage = returnMessage;
-	}
-	
 	public List<Country> getCountryList() {
-		countryList = new ArrayList<Country>(geographyDao.getAllCountries());
 		return countryList;
 	}
 	
-	public String addCountry(Country country) {
-		returnMessage = geographyDao.addCountry(country);
-		if(returnMessage.contains("Duplicate")) {
-			System.out.println(returnMessage);
-			return null;
-		}
-		else {
-			System.out.println(returnMessage);
-			return "list_countries.xhtml";
-		}		
+	public void addCountry(Country country) {
+		try {
+			geographyDao.addCountry(country);
+			//return "list_countries.xhtml";
+		} catch (Exception e) {
+			System.out.println("-------------------");
+			e.printStackTrace();
+			System.out.println("-------------------");
+			// connection error handling
+			if (e.getMessage().contains("Connection") || e.getMessage().contains("Communication")) {
+				FacesMessage message = new FacesMessage("Error: Database Connection Failed");
+				FacesContext.getCurrentInstance().addMessage(null, message);				
+			}
+			else {
+				System.out.println("catch other exceptipn");
+			}
+			//return null;
+		}	
 	}
 	
 	public String deleteCountry(Country country) {
-		returnMessage = geographyDao.deleteCountry(country);
-		if(returnMessage.contains("constraint")) {			
+		try {
+			geographyDao.deleteCountry(country);
+			return "list_countries.xhtml";
+		} catch (Exception e) {
+			e.printStackTrace();
 			return null;
-		}
-		return "list_countries.xhtml";
+		}		
 	}
 		
-	public String updateCountry() {		
-		geographyDao.updateCountry(country, srcCo_code);
-		return "list_countries.xhtml";
+	public String updateCountry() {
+		try {
+			geographyDao.updateCountry(country, srcCo_code);
+			return "list_countries.xhtml";
+		} catch (Exception e) {
+			e.printStackTrace();
+			return null;
+		}
 	}
 	
 	public String passValues(Country country) {

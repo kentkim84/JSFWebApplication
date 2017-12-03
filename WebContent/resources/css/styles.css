@@ -1,5 +1,4 @@
 .styleTable {   
-    border-collapse:collapse;
     border:1px solid #000000;
  }
  
@@ -8,15 +7,22 @@
     text-align:center;
     background:none repeat scroll 0 0 #B5B5B5;
     border-bottom:1px solid #000000;  
-    padding:2px;
+    padding:10px;
+    
  }
  
  .styleTableOddRow {
     text-align:center;
     background:none repeat scroll 0 0 #FFFFFF;
+    border-left:1px solid #FFFFFF;
  }
  
  .styleTableEvenRow {    
  	text-align:center;  
     background:none repeat scroll 0 0 #D3D3D3;
+    border-left:1px solid #FFFFFF;
+ }
+ 
+ .error {
+ 	color: red;
  }

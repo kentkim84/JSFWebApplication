@@ -2,25 +2,39 @@ package com.geog.controller;
 
 import com.geog.dao.*;
 import com.geog.model.*;
+
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.SessionScoped;
-//import javax.faces.bean.RequestScoped;
+import javax.faces.context.FacesContext;
 
 @ManagedBean
 @SessionScoped
-//@RequestScoped
 public class CityCtrl {
-	private GeographyDao geographyDao = new GeographyDaoImpl();
+	private GeographyDao geographyDao;
 	private List<City> cityList;
 	private List<Result> resultList;
-	private City city = new City();
+	private City city;
 	private String condition;
-	private String returnMessage = new String();
 	
 	public CityCtrl() {
+	}
+	
+	public void onload() {
+		try {
+			city = new City();
+			geographyDao = new GeographyDaoImpl();			
+			cityList = new ArrayList<City>(geographyDao.getAllCities());			
+		} catch (Exception e) {
+			e.printStackTrace();
+			if (e.getMessage().contains("Connection") || e.getMessage().contains("Communication")) {
+				FacesMessage message = new FacesMessage("Error: SQL Database Connection Failed");
+				FacesContext.getCurrentInstance().addMessage(null, message);
+			}
+		}		
 	}
 
 	public String getCo_code() {
@@ -79,33 +93,38 @@ public class CityCtrl {
 	}
 	
 	public String getCo_name() {
-		return geographyDao.getValueFromMultiTables(this.city, "co_name", "co_code", "country");
+		String co_name;
+		try {
+			co_name = geographyDao.getValueFromMultiTables(this.city, "co_name", "co_code", "country");
+		} catch (Exception e) {
+			e.printStackTrace();
+			co_name = e.getMessage();
+		}
+		return co_name;
 	}
 	
 	public String getReg_name() {
-		return geographyDao.getValueFromMultiTables(this.city, "reg_name", "reg_code", "region");
+		String reg_name;	
+		try {
+			reg_name = geographyDao.getValueFromMultiTables(this.city, "reg_name", "reg_code", "region");
+		} catch (Exception e) {
+			e.printStackTrace();
+			reg_name = e.getMessage();
+		}
+		return reg_name;
 	}
-	
-	public String getReturnMessage() {
-		return returnMessage;
-	}
-	
-	public void setReturnMessage(String errorMessage) {
-		this.returnMessage = errorMessage;
-	}
-	
+
 	public List<City> getCityList() {
-		cityList = new ArrayList<City>(geographyDao.getAllCities());
 		return cityList;
 	}
 		
 	public String addCity(City city) {
-		returnMessage = geographyDao.addCity(city);
-		if(returnMessage.contains("constraint")) {
-			return null;
-		}
-		else {
+		try {
+			geographyDao.addCity(city);;
 			return "list_cities.xhtml";
+		} catch (Exception e) {
+			e.printStackTrace();
+			return null;
 		}
 	}
 	
@@ -147,8 +166,14 @@ public class CityCtrl {
 	}
 	
 	public String searchCities(City city) {		
-		resultList = new ArrayList<Result>(geographyDao.searchCities(city, condition));		
-		return "find_result.xhtml";
+		resultList = new ArrayList<Result>();
+		try {
+			resultList = geographyDao.searchCities(city, condition);
+			return "find_result.xhtml";
+		} catch (Exception e) {
+			e.printStackTrace();
+			return null;
+		}
 	}
 	
 	public List<Result> getResultList() {
@@ -159,14 +184,24 @@ public class CityCtrl {
 	public String deleteCity() {				
 		System.out.println(this.city.getCty_code());
 		System.out.println(city.getCty_code());
-		geographyDao.deleteCity(city);
-		return "list_cities.xhtml";
+		try {
+			geographyDao.deleteCity(city);
+			return "list_cities.xhtml";
+		} catch (Exception e) {
+			e.printStackTrace();
+			return null;
+		}
 	}
 	
 	// not required methods
 	public String updateCity() {		
-		geographyDao.updateCity(city);
-		return "list_cities.xhtml";
+		try {
+			geographyDao.updateCity(city);
+			return "list_cities.xhtml";
+		} catch (Exception e) {
+			e.printStackTrace();
+			return null;
+		}
 	}
 	
 	public String passValues(City city) {

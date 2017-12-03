@@ -5,27 +5,22 @@ import com.geog.model.*;
 
 public interface GeographyDao {
 	// initialisation section
-	public void initSqlConnection();
-	public void initMongoConnection();
+	public void initSqlConnection() throws Exception;	
 	// Country section	
-	public List<Country> getAllCountries();
-	public String addCountry(Country country);
-	public String updateCountry(Country country, String srcCo_code);
-	public String deleteCountry(Country country);
+	public List<Country> getAllCountries() throws Exception;
+	public void addCountry(Country country) throws Exception;
+	public void updateCountry(Country country, String srcCo_code) throws Exception;
+	public void deleteCountry(Country country) throws Exception;
 	// Region section
-	public List<Region> getAllRegions();
-	public String addRegion(Region region);
-	public String updateRegion(Region region);
-	public String deleteRegion(Region region);
+	public List<Region> getAllRegions() throws Exception;
+	public void addRegion(Region region) throws Exception;
+	public void updateRegion(Region region) throws Exception;
+	public void deleteRegion(Region region) throws Exception;
 	// City section
-	public List<City> getAllCities();
-	public List<Result> searchCities(City city, String condition);
-	public String getValueFromMultiTables(City cty, String targetValue, String commonValue, String source);
-	public String addCity(City city);
-	public String updateCity(City city);
-	public String deleteCity(City city);
-	// State section
-	public List<State> getAllStates();	
-	public String addState(State state);	
-	public String deleteState(State state);
+	public List<City> getAllCities() throws Exception;
+	public List<Result> searchCities(City city, String condition) throws Exception;
+	public String getValueFromMultiTables(City cty, String targetValue, String commonValue, String source) throws Exception;
+	public void addCity(City city) throws Exception;
+	public void updateCity(City city) throws Exception;
+	public void deleteCity(City city) throws Exception;
 }

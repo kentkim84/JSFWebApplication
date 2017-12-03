@@ -9,9 +9,12 @@
 	<h:outputStylesheet library = "css" name = "styles.css"  />
 </h:head>
 <h:body>
+	<f:metadata>	
+		<f:event type="preRenderView" listener="#{stateCtrl.onload}" />
+	</f:metadata>	
 	<h:form id="form">
-		<h:button value = "Add Head of State" outcome="add_head_of_state" />
-	
+		<h:messages globalOnly="true" styleClass="error" />
+		<h:button value = "Add Head of State" outcome="add_head_of_state" />	
 		<br/>
 		<h:dataTable value = "#{stateCtrl.stateList}" var = "state"
 		           styleClass = "styleTable"

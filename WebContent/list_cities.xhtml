@@ -8,7 +8,11 @@
 	<h:outputStylesheet library = "css" name = "styles.css"  />
 </h:head>
 <h:body>
+	<f:metadata>	
+		<f:event type="preRenderView" listener="#{cityCtrl.onload}" />
+	</f:metadata>	
 	<h:form id="form">
+		<h:messages globalOnly="true" styleClass="error" />
 		<h:button value = "Add City" outcome="add_city" />	
 		<br/><br/>
 		<h:dataTable value = "#{cityCtrl.cityList}" var = "city"
