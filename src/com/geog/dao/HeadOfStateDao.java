@@ -3,7 +3,6 @@ package com.geog.dao;
 import java.util.List;
 
 import com.geog.model.State;
-import com.mongodb.MongoException;
 
 public interface HeadOfStateDao {	
 	// State section

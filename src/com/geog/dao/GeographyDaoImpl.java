@@ -202,12 +202,12 @@ public class GeographyDaoImpl implements GeographyDao {
 		return cityList;
 	}
 	
-	public List<Result> searchCities(City city, String condition) throws Exception {
-		PreparedStatement pstmt = null;
-		ResultSet rs = null;
-		resultList = new ArrayList<Result>();
-		String option = "";
-		int i = 0;
+	public List<Result> searchCities(City city, String condition) throws Exception {		
+		PreparedStatement pstmt = null;		
+		ResultSet rs = null;		
+		resultList = new ArrayList<Result>();		
+		String option = "";		
+		int i = 0;	
 		if (!city.getCo_code().isEmpty()) {
 			option = " and city.co_code = ?";
 		}
@@ -219,13 +219,13 @@ public class GeographyDaoImpl implements GeographyDao {
 				+ " where city.population " + condition + " ?"
 				+ option
 				+ " and city.iscoastal = ?";
-		pstmt = conn.prepareStatement(query);
+		pstmt = conn.prepareStatement(query);		
 		pstmt.setInt(++i, city.getPopulation());
 		if (!city.getCo_code().isEmpty()) {
 			pstmt.setString(++i, city.getCo_code());				
 		}
 		pstmt.setString(++i, String.valueOf(city.getIsCoastal()));			
-		rs = pstmt.executeQuery();			
+		rs = pstmt.executeQuery();		
 		if(rs.next()) {
 			do {
 				Result result = new Result();

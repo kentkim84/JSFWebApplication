@@ -18,7 +18,8 @@ public class StateCtrl {
 	private GeographyDao geographyDao;
 	private List<State> stateList;
 	private List<Country> countryList;
-	private State state;	
+	private State state;
+	private FacesMessage message;
 	
 	public StateCtrl() {
 	}
@@ -26,14 +27,22 @@ public class StateCtrl {
 	public void onload() {
 		try {			
 			state = new State();
-			headOfStateDao = new HeadOfStateImpl();
-			geographyDao = new GeographyDaoImpl();
-			stateList = new ArrayList<State>(headOfStateDao.getAllStates());
-			countryList = new ArrayList<Country>(geographyDao.getAllCountries());		
+			headOfStateDao = new HeadOfStateImpl();			
+			stateList = new ArrayList<State>(headOfStateDao.getAllStates());			
 		} catch (Exception e) { 
 			e.printStackTrace();
-			if (e.getMessage().contains("Connection")) {
-				FacesMessage message = new FacesMessage("Error: Mongo Database Connection Failed");
+			// connection error handling
+			if (e.toString().contains("MongoException") 
+					&& (e.toString().contains("MongoSocketOpenException")
+					|| e.toString().contains("ConnectException")
+					|| e.toString().contains("MongoTimeoutException"))) {
+				FacesMessage message = new FacesMessage(e.getMessage());
+				FacesContext.getCurrentInstance().addMessage(null, message);
+			}
+			// other error handling
+			// display the exception
+			else {
+				message = new FacesMessage("Error: " + e.toString());
 				FacesContext.getCurrentInstance().addMessage(null, message);
 			}
 		}
@@ -62,34 +71,71 @@ public class StateCtrl {
 	}
 	
 	public String addState(State state) {
-		/*try {
-			
-		} catch (SQLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}*/
 		boolean _idFound = false;
-		for (Country country : countryList) {
-			System.out.println("iteration: " + country.getCo_code() + " " + country.getCo_name());
-			if (state.get_id().equalsIgnoreCase(country.getCo_code())) {
-				// handle the error, cannot add this state records
-				_idFound = true;
-				System.out.println("found: " + state.get_id());
+		try {
+			geographyDao = new GeographyDaoImpl();
+			countryList = new ArrayList<Country>(geographyDao.getAllCountries());
+			for (Country country : countryList) {
+				System.out.println("iteration: " + country.getCo_code() + " " + country.getCo_name());
+				if (state.get_id().equalsIgnoreCase(country.getCo_code())) {
+					// handle the error, cannot add this state records
+					_idFound = true;
+					System.out.println("found: " + state.get_id());
+				}
 			}
-		}		
-		if(_idFound == true) {			
-			System.out.println("Cannot add " + state.get_id());
-			try {
-				headOfStateDao.addState(state);
-			} catch (Exception e) {				
-				e.printStackTrace();
+		} catch (Exception e) { 
+			e.printStackTrace();
+			// connection error handling
+			if (e.toString().contains("CommunicationsException") 
+					|| e.toString().contains("SocketException")
+					|| e.toString().contains("ConnectException")) {
+				message = new FacesMessage(e.getMessage());
+				FacesContext.getCurrentInstance().addMessage(null, message);				
 			}
-			return "list_heads_of_state.xhtml";			
-		}
-		else {
-			System.out.println("Cannot add ");
+			// sql update error handling
+			else if (e.toString().contains("MySQLIntegrityConstraintViolationException")) {
+				message = new FacesMessage(e.getMessage());
+				FacesContext.getCurrentInstance().addMessage(null, message);
+			}
+			// other error handling
+			// display the exception
+			else {
+				message = new FacesMessage("Error: " + e.toString());
+				FacesContext.getCurrentInstance().addMessage(null, message);
+			}
 			return null;
 		}
+		
+				
+		if(_idFound == true) {						
+			try {
+				headOfStateDao.addState(state);
+				return "list_heads_of_state.xhtml";
+			} catch (Exception me) {				
+				me.printStackTrace();
+				// connection error handling
+				if (me.toString().contains("MongoException") 
+						|| me.toString().contains("MongoSocketOpenException")
+						|| me.toString().contains("ConnectException")
+						|| me.toString().contains("MongoTimeoutException")) {
+					FacesMessage message = new FacesMessage(me.getMessage());
+					FacesContext.getCurrentInstance().addMessage(null, message);
+				}
+				// other error handling
+				// display the exception
+				else {
+					message = new FacesMessage("Error: " + me.toString());
+					FacesContext.getCurrentInstance().addMessage(null, message);
+				}
+				return null;
+			}
+			
+		}
+		else {
+			message = new FacesMessage("Error: Cannot add, could not find " + state.get_id());
+			FacesContext.getCurrentInstance().addMessage(null, message);
+			return null;
+		}		
 	}
 	
 	public String deleteState(State state) {
@@ -97,6 +143,21 @@ public class StateCtrl {
 			headOfStateDao.deleteState(state);
 			return "list_heads_of_state.xhtml";
 		} catch (Exception e) {
+			e.printStackTrace();
+			// connection error handling
+			if (e.toString().contains("MongoException") 
+					&& (e.toString().contains("MongoSocketOpenException")
+					|| e.toString().contains("ConnectException")
+					|| e.toString().contains("MongoTimeoutException"))) {
+				FacesMessage message = new FacesMessage(e.getMessage());
+				FacesContext.getCurrentInstance().addMessage(null, message);
+			}
+			// other error handling
+			// display the exception
+			else {
+				message = new FacesMessage("Error: " + e.toString());
+				FacesContext.getCurrentInstance().addMessage(null, message);
+			}
 			return null;
 		}
 	}

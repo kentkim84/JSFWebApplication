@@ -19,6 +19,7 @@ public class CityCtrl {
 	private List<Result> resultList;
 	private City city;
 	private String condition;
+	private FacesMessage message;
 	
 	public CityCtrl() {
 	}
@@ -30,8 +31,18 @@ public class CityCtrl {
 			cityList = new ArrayList<City>(geographyDao.getAllCities());			
 		} catch (Exception e) {
 			e.printStackTrace();
-			if (e.getMessage().contains("Connection") || e.getMessage().contains("Communication")) {
-				FacesMessage message = new FacesMessage("Error: SQL Database Connection Failed");
+			// connection error handling
+			if (e.toString().contains("SQLException") 
+					&& (e.toString().contains("CommunicationsException")
+					|| e.toString().contains("ConnectException")
+					|| e.toString().contains("SocketException"))) {
+				FacesMessage message = new FacesMessage(e.getMessage());
+				FacesContext.getCurrentInstance().addMessage(null, message);
+			}
+			// other error handling
+			// display the exception
+			else {
+				message = new FacesMessage("Error: " + e.toString());
 				FacesContext.getCurrentInstance().addMessage(null, message);
 			}
 		}		
@@ -124,6 +135,24 @@ public class CityCtrl {
 			return "list_cities.xhtml";
 		} catch (Exception e) {
 			e.printStackTrace();
+			// connection error handling
+			if (e.toString().contains("CommunicationsException") 
+					|| e.toString().contains("SocketException")
+					|| e.toString().contains("ConnectException")) {
+				message = new FacesMessage(e.getMessage());
+				FacesContext.getCurrentInstance().addMessage(null, message);				
+			}
+			// sql update error handling
+			else if (e.toString().contains("MySQLIntegrityConstraintViolationException")) {
+				message = new FacesMessage(e.getMessage());
+				FacesContext.getCurrentInstance().addMessage(null, message);
+			}
+			// other error handling
+			// display the exception
+			else {
+				message = new FacesMessage("Error: " + e.toString());
+				FacesContext.getCurrentInstance().addMessage(null, message);
+			}
 			return null;
 		}
 	}
@@ -165,13 +194,30 @@ public class CityCtrl {
 		}		
 	}
 	
-	public String searchCities(City city) {		
-		resultList = new ArrayList<Result>();
+	public String searchCities(City city) {				
 		try {
-			resultList = geographyDao.searchCities(city, condition);
+			resultList = new ArrayList<Result>(geographyDao.searchCities(city, condition));
 			return "find_result.xhtml";
 		} catch (Exception e) {
 			e.printStackTrace();
+			// connection error handling
+			if (e.toString().contains("CommunicationsException") 
+					|| e.toString().contains("SocketException")
+					|| e.toString().contains("ConnectException")) {
+				message = new FacesMessage(e.getMessage());
+				FacesContext.getCurrentInstance().addMessage(null, message);				
+			}
+			// sql update error handling
+			else if (e.toString().contains("MySQLIntegrityConstraintViolationException")) {
+				message = new FacesMessage(e.getMessage());
+				FacesContext.getCurrentInstance().addMessage(null, message);
+			}
+			// other error handling
+			// display the exception
+			else {
+				message = new FacesMessage("Error: " + e.toString());
+				FacesContext.getCurrentInstance().addMessage(null, message);
+			}
 			return null;
 		}
 	}
@@ -189,6 +235,24 @@ public class CityCtrl {
 			return "list_cities.xhtml";
 		} catch (Exception e) {
 			e.printStackTrace();
+			// connection error handling
+			if (e.toString().contains("CommunicationsException") 
+					|| e.toString().contains("SocketException")
+					|| e.toString().contains("ConnectException")) {
+				message = new FacesMessage(e.getMessage());
+				FacesContext.getCurrentInstance().addMessage(null, message);				
+			}
+			// sql update error handling
+			else if (e.toString().contains("MySQLIntegrityConstraintViolationException")) {
+				message = new FacesMessage(e.getMessage());
+				FacesContext.getCurrentInstance().addMessage(null, message);
+			}
+			// other error handling
+			// display the exception
+			else {
+				message = new FacesMessage("Error: " + e.toString());
+				FacesContext.getCurrentInstance().addMessage(null, message);
+			}
 			return null;
 		}
 	}
@@ -200,6 +264,24 @@ public class CityCtrl {
 			return "list_cities.xhtml";
 		} catch (Exception e) {
 			e.printStackTrace();
+			// connection error handling
+			if (e.toString().contains("CommunicationsException") 
+					|| e.toString().contains("SocketException")
+					|| e.toString().contains("ConnectException")) {
+				message = new FacesMessage(e.getMessage());
+				FacesContext.getCurrentInstance().addMessage(null, message);				
+			}
+			// sql update error handling
+			else if (e.toString().contains("MySQLIntegrityConstraintViolationException")) {
+				message = new FacesMessage(e.getMessage());
+				FacesContext.getCurrentInstance().addMessage(null, message);
+			}
+			// other error handling
+			// display the exception
+			else {
+				message = new FacesMessage("Error: " + e.toString());
+				FacesContext.getCurrentInstance().addMessage(null, message);
+			}
 			return null;
 		}
 	}

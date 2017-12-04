@@ -18,7 +18,8 @@ public class CountryCtrl {
 	private GeographyDao geographyDao;
 	private List<Country> countryList;
 	private Country country;	
-	private String srcCo_code;	
+	private String srcCo_code;
+	private FacesMessage message;
 
 	public CountryCtrl() {
 	}
@@ -31,11 +32,20 @@ public class CountryCtrl {
 		} catch (Exception e) {			
 			e.printStackTrace();
 			// connection error handling
-			if (e.getMessage().contains("Connection") || e.getMessage().contains("Communication")) {
-				FacesMessage message = new FacesMessage("Error: SQL Database Connection Failed");
+			if (e.toString().contains("SQLException") 
+					&& (e.toString().contains("CommunicationsException")
+					|| e.toString().contains("ConnectException")
+					|| e.toString().contains("SocketException"))) {
+				FacesMessage message = new FacesMessage(e.getMessage());
 				FacesContext.getCurrentInstance().addMessage(null, message);
-			}		
-		}		
+			}
+			// other error handling
+			// display the exception
+			else {
+				message = new FacesMessage("Error: " + e.toString());
+				FacesContext.getCurrentInstance().addMessage(null, message);
+			}
+		}
 	}
 	
 	public String getCo_code() {
@@ -66,23 +76,31 @@ public class CountryCtrl {
 		return countryList;
 	}
 	
-	public void addCountry(Country country) {
+	public String addCountry(Country country) {
 		try {
 			geographyDao.addCountry(country);
-			//return "list_countries.xhtml";
-		} catch (Exception e) {
-			System.out.println("-------------------");
+			return "list_countries.xhtml";
+		} catch (Exception e) {			
 			e.printStackTrace();
-			System.out.println("-------------------");
 			// connection error handling
-			if (e.getMessage().contains("Connection") || e.getMessage().contains("Communication")) {
-				FacesMessage message = new FacesMessage("Error: Database Connection Failed");
+			if (e.toString().contains("CommunicationsException") 
+					|| e.toString().contains("SocketException")
+					|| e.toString().contains("ConnectException")) {
+				message = new FacesMessage(e.getMessage());
 				FacesContext.getCurrentInstance().addMessage(null, message);				
 			}
-			else {
-				System.out.println("catch other exceptipn");
+			// sql update error handling
+			else if (e.toString().contains("MySQLIntegrityConstraintViolationException")) {
+				message = new FacesMessage(e.getMessage());
+				FacesContext.getCurrentInstance().addMessage(null, message);
 			}
-			//return null;
+			// other error handling
+			// display the exception
+			else {
+				message = new FacesMessage("Error: " + e.toString());
+				FacesContext.getCurrentInstance().addMessage(null, message);
+			}
+			return null;
 		}	
 	}
 	
@@ -92,6 +110,24 @@ public class CountryCtrl {
 			return "list_countries.xhtml";
 		} catch (Exception e) {
 			e.printStackTrace();
+			// connection error handling
+			if (e.toString().contains("CommunicationsException") 
+					|| e.toString().contains("SocketException")
+					|| e.toString().contains("ConnectException")) {
+				message = new FacesMessage(e.getMessage());
+				FacesContext.getCurrentInstance().addMessage(null, message);				
+			}
+			// sql update error handling
+			else if (e.toString().contains("MySQLIntegrityConstraintViolationException")) {
+				message = new FacesMessage(e.getMessage());
+				FacesContext.getCurrentInstance().addMessage(null, message);
+			}
+			// other error handling
+			// display the exception
+			else {
+				message = new FacesMessage("Error: " + e.toString());
+				FacesContext.getCurrentInstance().addMessage(null, message);
+			}
 			return null;
 		}		
 	}
@@ -102,6 +138,24 @@ public class CountryCtrl {
 			return "list_countries.xhtml";
 		} catch (Exception e) {
 			e.printStackTrace();
+			// connection error handling
+			if (e.toString().contains("CommunicationsException") 
+					|| e.toString().contains("SocketException")
+					|| e.toString().contains("ConnectException")) {
+				message = new FacesMessage(e.getMessage());
+				FacesContext.getCurrentInstance().addMessage(null, message);				
+			}
+			// sql update error handling
+			else if (e.toString().contains("MySQLIntegrityConstraintViolationException")) {
+				message = new FacesMessage(e.getMessage());
+				FacesContext.getCurrentInstance().addMessage(null, message);
+			}
+			// other error handling
+			// display the exception
+			else {
+				message = new FacesMessage("Error: " + e.toString());
+				FacesContext.getCurrentInstance().addMessage(null, message);
+			}
 			return null;
 		}
 	}

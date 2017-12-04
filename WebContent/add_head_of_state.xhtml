@@ -13,9 +13,7 @@
 		<h3>Add Head of State</h3>
 		<br/>
 		<h:outputLabel for="countryCodeFromState">Country Code: </h:outputLabel>
-		<h:inputText id="countryCodeFromState" value="#{state._id}" required="true" requiredMessage="Country Code is required">
-			<f:validator validatorId="addDataValidator" />
-        </h:inputText>
+		<h:inputText id="countryCodeFromState" value="#{state._id}" required="true" requiredMessage="Country Code is required"/>
 		<h:message for="countryCodeFromState" style="color: red"/> 
 		<br/>
 		<h:outputLabel for="headOfState">Head of State: </h:outputLabel>

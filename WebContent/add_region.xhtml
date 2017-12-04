@@ -13,9 +13,7 @@
 		<h3>Add Region</h3>
 		<br/>
 		<h:outputLabel for="countryCodeFromRegion">Country Code: </h:outputLabel>
-		<h:inputText id="countryCodeFromRegion" value="#{region.co_code}" required="true" requiredMessage="Country Code is required">
-			<f:validator validatorId="addDataValidator" />
-        </h:inputText>
+		<h:inputText id="countryCodeFromRegion" value="#{region.co_code}" required="true" requiredMessage="Country Code is required"/>
 		<h:message for="countryCodeFromRegion" style="color: red"/> 
 		<br/>
 		<h:outputLabel for="regionCode">Region Code: </h:outputLabel>

@@ -17,9 +17,7 @@
 		<h:message for="cityCode" style="color: red"/>
 		<br/>
 		<h:outputLabel for="countryCodeFromCity">Country Code: </h:outputLabel>
-		<h:inputText id="countryCodeFromCity" value="#{city.co_code}" required="true" requiredMessage="Country Code is required">
-			<f:validator validatorId="addDataValidator" />
-        </h:inputText>
+		<h:inputText id="countryCodeFromCity" value="#{city.co_code}" required="true" requiredMessage="Country Code is required"/>
 		<h:message for="countryCodeFromCity" style="color: red"/> 
 		<br/>
 		<h:outputLabel for="regionCode">Region Code: </h:outputLabel>

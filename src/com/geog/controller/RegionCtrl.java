@@ -3,7 +3,6 @@ package com.geog.controller;
 import com.geog.dao.*;
 import com.geog.model.*;
 
-import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -17,7 +16,8 @@ import javax.faces.context.FacesContext;
 public class RegionCtrl {
 	private GeographyDao geographyDao;
 	private List<Region> regionList;
-	private Region region;	
+	private Region region;
+	private FacesMessage message;
 	
 	public RegionCtrl() {
 	}
@@ -29,8 +29,18 @@ public class RegionCtrl {
 			regionList = new ArrayList<Region>(geographyDao.getAllRegions());		
 		} catch (Exception e) {
 			e.printStackTrace();
-			if (e.getMessage().contains("Connection") || e.getMessage().contains("Communication")) {
-				FacesMessage message = new FacesMessage("Error: SQL Database Connection Failed");
+			// connection error handling
+			if (e.toString().contains("SQLException") 
+					&& (e.toString().contains("CommunicationsException")
+					|| e.toString().contains("ConnectException")
+					|| e.toString().contains("SocketException"))) {
+				FacesMessage message = new FacesMessage(e.getMessage());
+				FacesContext.getCurrentInstance().addMessage(null, message);
+			}
+			// other error handling
+			// display the exception
+			else {
+				message = new FacesMessage("Error: " + e.toString());
 				FacesContext.getCurrentInstance().addMessage(null, message);
 			}
 		}		
@@ -78,6 +88,24 @@ public class RegionCtrl {
 			return "list_regions.xhtml";
 		} catch (Exception e) {
 			e.printStackTrace();
+			// connection error handling
+			if (e.toString().contains("CommunicationsException") 
+					|| e.toString().contains("SocketException")
+					|| e.toString().contains("ConnectException")) {
+				message = new FacesMessage(e.getMessage());
+				FacesContext.getCurrentInstance().addMessage(null, message);				
+			}
+			// sql update error handling
+			else if (e.toString().contains("MySQLIntegrityConstraintViolationException")) {
+				message = new FacesMessage(e.getMessage());
+				FacesContext.getCurrentInstance().addMessage(null, message);
+			}
+			// other error handling
+			// display the exception
+			else {
+				message = new FacesMessage("Error: " + e.toString());
+				FacesContext.getCurrentInstance().addMessage(null, message);
+			}
 			return null;
 		}
 	}
@@ -89,6 +117,24 @@ public class RegionCtrl {
 			return "list_regions.xhtml";
 		} catch (Exception e) {
 			e.printStackTrace();
+			// connection error handling
+			if (e.toString().contains("CommunicationsException") 
+					|| e.toString().contains("SocketException")
+					|| e.toString().contains("ConnectException")) {
+				message = new FacesMessage(e.getMessage());
+				FacesContext.getCurrentInstance().addMessage(null, message);				
+			}
+			// sql update error handling
+			else if (e.toString().contains("MySQLIntegrityConstraintViolationException")) {
+				message = new FacesMessage(e.getMessage());
+				FacesContext.getCurrentInstance().addMessage(null, message);
+			}
+			// other error handling
+			// display the exception
+			else {
+				message = new FacesMessage("Error: " + e.toString());
+				FacesContext.getCurrentInstance().addMessage(null, message);
+			}
 			return null;
 		}
 		
@@ -101,6 +147,25 @@ public class RegionCtrl {
 			return "list_regions.xhtml";
 		} catch (Exception e) {
 			e.printStackTrace();
+			e.printStackTrace();
+			// connection error handling
+			if (e.toString().contains("CommunicationsException") 
+					|| e.toString().contains("SocketException")
+					|| e.toString().contains("ConnectException")) {
+				message = new FacesMessage(e.getMessage());
+				FacesContext.getCurrentInstance().addMessage(null, message);				
+			}
+			// sql update error handling
+			else if (e.toString().contains("MySQLIntegrityConstraintViolationException")) {
+				message = new FacesMessage(e.getMessage());
+				FacesContext.getCurrentInstance().addMessage(null, message);
+			}
+			// other error handling
+			// display the exception
+			else {
+				message = new FacesMessage("Error: " + e.toString());
+				FacesContext.getCurrentInstance().addMessage(null, message);
+			}
 			return null;
 		}
 	}

@@ -2,14 +2,14 @@
 <html lang="en"
 	xmlns="http://www.w3.org/1999/xhtml"
 	xmlns:h="http://xmlns.jcp.org/jsf/html"
-	xmlns:f="http://xmlns.jcp.org/jsf/core"
-	xmlns:p="http://xmlns.jcp.org/jsf/passthrough">
+	xmlns:f="http://xmlns.jcp.org/jsf/core">
 <h:head>
 	<title>Display City</title>
 	<h:outputStylesheet library = "css" name = "styles.css"  />
 </h:head>
 <h:body>	
 	<h:form id="form">
+		<h:messages globalOnly="true" styleClass="error" />
 		<h3>Full City Details</h3>
 		<br/>
 		<h:outputLabel for="cityCode">City Code: </h:outputLabel>
