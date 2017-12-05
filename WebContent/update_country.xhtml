@@ -10,8 +10,7 @@
 <h:body>
 	<h:form id="form">
 		<h:messages globalOnly="true" styleClass="error" />
-		<h3>Update Country</h3>
-		<br/>
+		<h3>Update Country</h3>		
 		<h:outputLabel for="countryCode">Country Code: </h:outputLabel>
 		<h:inputText id="countryCode" value="#{countryCtrl.co_code}" required="true" requiredMessage="Country Code is required"/>
 		<h:message for="countryCode" style="color: red"/>	
@@ -22,10 +21,11 @@
 		<br/>
 		<h:outputLabel for="countryDetails">Country Details: </h:outputLabel>
 		<h:inputText id="countryDetails" value="#{countryCtrl.co_details}"/>
-		<br/>
+		<br/><br/>
 		<h:commandButton value="Update" type="submit" action="#{countryCtrl.updateCountry}"/>  
 	</h:form>
 	<h:link value="Home" outcome="index"/>
+	<h:outputText value="&#160;" />
 	<h:link value="Countries" outcome="list_countries"/>
 </h:body>
 </html>

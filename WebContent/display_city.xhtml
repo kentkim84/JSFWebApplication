@@ -10,8 +10,7 @@
 <h:body>	
 	<h:form id="form">
 		<h:messages globalOnly="true" styleClass="error" />
-		<h3>Full City Details</h3>
-		<br/>
+		<h3>Full City Details</h3>		
 		<h:outputLabel for="cityCode">City Code: </h:outputLabel>
 		<h:outputText id="cityCode" value="#{cityCtrl.cty_code}"/>
 		<br/>
@@ -32,11 +31,12 @@
 		<br/>
 		<h:outputLabel for="cityAreaKm">Area (KM): </h:outputLabel>
 		<h:outputText id="cityAreaKm" value="#{cityCtrl.areaKm}"/>
-		<br/>
+		<br/><br/>
 		<h:commandButton value="Delete" type="submit" action="#{cityCtrl.deleteCity}"/>
 		<br/>
 	</h:form>
 	<h:link value="Home" outcome="index"/>
+	<h:outputText value="&#160;" />
 	<h:link value="Cities" outcome="list_cities"/>
 </h:body>
 </html>

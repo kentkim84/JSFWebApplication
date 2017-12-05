@@ -10,8 +10,7 @@
 <h:body>
 	<h:form id="form">
 		<h:messages globalOnly="true" styleClass="error" />
-		<h3>Add Head of State</h3>
-		<br/>
+		<h3>Add Head of State</h3>		
 		<h:outputLabel for="countryCodeFromState">Country Code: </h:outputLabel>
 		<h:inputText id="countryCodeFromState" value="#{state._id}" required="true" requiredMessage="Country Code is required"/>
 		<h:message for="countryCodeFromState" style="color: red"/> 
@@ -19,10 +18,11 @@
 		<h:outputLabel for="headOfState">Head of State: </h:outputLabel>
 		<h:inputText id="headOfState" value="#{state.headOfState}" required="true" requiredMessage="Head of State is required"/>
 		<h:message for="headOfState" style="color: red"/>
-		<br/>
+		<br/><br/>
 		<h:commandButton value="Add" type="submit" action="#{stateCtrl.addState(state)}"/>  
 	</h:form>
 	<h:link value="Home" outcome="index"/>
+	<h:outputText value="&#160;" />
 	<h:link value="Heads of State" outcome="list_heads_of_state"/>
 </h:body>
 </html>

@@ -14,8 +14,9 @@
 	<h:form id="form">
 		<h:messages globalOnly="true" styleClass="error" />
 		<h3>Find All Cities</h3>
-		<br/>  
+
 		<h:outputLabel for="cityPopulation">Population: </h:outputLabel>
+		<h:outputText value="&#160;" />
 		<h:selectOneMenu value = "#{cityCtrl.condition}"> 
 			<f:selectItem itemValue = "lt" itemLabel = "Less Than" /> 
 			<f:selectItem itemValue = "gt" itemLabel = "Greater Than" /> 
@@ -23,18 +24,22 @@
 			<f:selectItem itemValue = "gte" itemLabel = "Greater Than or Equal to" /> 
 			<f:selectItem itemValue = "eq" itemLabel = "Equal to" />     
 		</h:selectOneMenu>
+		<h:outputText value="&#160;" />
 		<h:inputText id="cityPopulation" value="#{city.population}"/>
-		<br/>
+		<br/><br/>
 		<h:outputLabel for="countryCode">Country code: </h:outputLabel>
+		<h:outputText value="&#160;" />
 		<h:inputText id="countryCode" value="#{city.co_code}"/>
-		<br/>
+		<br/><br/>
 		<h:outputLabel for="byTheSea">By The Sea: </h:outputLabel>
+		<h:outputText value="&#160;" />
 		<h:selectOneMenu id="byTheSea" value = "#{city.isCoastal}"> 
 			<f:selectItem itemValue = "true" itemLabel = "True" /> 
 			<f:selectItem itemValue = "false" itemLabel = "False" />     
 		</h:selectOneMenu>
-		<br/>
-		<h:commandButton value="Search" type="submit" action="#{cityCtrl.searchCities(city)}"/>  
+		<br/><br/>
+		<h:commandButton value="Search" type="submit" action="#{cityCtrl.searchCities(city)}"/>
+		<br/><br/>
 	</h:form> 
 	<h:link value="Home" outcome="index"/>
 </h:body>

@@ -10,8 +10,7 @@
 <h:body>
 	<h:form id="form">
 		<h:messages globalOnly="true" styleClass="error" />	
-		<h3>Add Region</h3>
-		<br/>
+		<h3>Add Region</h3>		
 		<h:outputLabel for="countryCodeFromRegion">Country Code: </h:outputLabel>
 		<h:inputText id="countryCodeFromRegion" value="#{region.co_code}" required="true" requiredMessage="Country Code is required"/>
 		<h:message for="countryCodeFromRegion" style="color: red"/> 
@@ -26,10 +25,11 @@
 		<br/>
 		<h:outputLabel for="regionDetails">Region Details: </h:outputLabel>
 		<h:inputText id="regionDetails" value="#{region.reg_details}"/>
-		<br/>
+		<br/><br/>
 		<h:commandButton value="Add" type="submit" action="#{regionCtrl.addRegion(region)}"/>  
 	</h:form>
 	<h:link value="Home" outcome="index"/>
+	<h:outputText value="&#160;" />
 	<h:link value="Regions" outcome="list_regions"/>
 </h:body>
 </html>

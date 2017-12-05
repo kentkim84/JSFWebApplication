@@ -26,3 +26,9 @@
  .error {
  	color: red;
  }
+ 
+ #form > * { 	
+ 	margin-top: 2px;
+ }
+ 
+ 
