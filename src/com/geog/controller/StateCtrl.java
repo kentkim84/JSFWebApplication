@@ -160,9 +160,9 @@ public class StateCtrl {
 			e.printStackTrace();
 			// connection error handling
 			if (e.toString().contains("MongoException") 
-					&& (e.toString().contains("MongoSocketOpenException")
+					|| e.toString().contains("MongoSocketOpenException")
 					|| e.toString().contains("ConnectException")
-					|| e.toString().contains("MongoTimeoutException"))) {
+					|| e.toString().contains("MongoTimeoutException")) {
 				FacesMessage message = new FacesMessage("Error: Cannot connect to Mongo Database");
 				FacesContext.getCurrentInstance().addMessage(null, message);
 			}
