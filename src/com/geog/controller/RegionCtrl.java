@@ -23,10 +23,10 @@ public class RegionCtrl {
 	}
 	
 	public void onLoad(String page) {
-		try {			
-			geographyDao = new GeographyDaoImpl();						
+		try {									
 			if (page.equals("list")) {
 				System.out.println("Page is: " + page);
+				geographyDao = new GeographyDaoImpl();
 				region = new Region();
 				regionList = new ArrayList<Region>(geographyDao.getAllRegions());
 			}
@@ -90,6 +90,7 @@ public class RegionCtrl {
 	
 	public String addRegion(Region region) {
 		try {
+			geographyDao = new GeographyDaoImpl();
 			geographyDao.addRegion(region);
 			return "list_regions.xhtml";
 		} catch (Exception e) {
@@ -111,6 +112,13 @@ public class RegionCtrl {
 			else {
 				message = new FacesMessage("Error: " + e.toString());
 				FacesContext.getCurrentInstance().addMessage(null, message);
+			}
+			// try to close the remaining connection
+			// if still connected, system will close it
+			try {
+				geographyDao.closeSqlConnection();
+			} catch (Exception e2) {
+				e2.printStackTrace();
 			}
 			return null;
 		}
@@ -142,6 +150,13 @@ public class RegionCtrl {
 				message = new FacesMessage("Error: " + e.toString());
 				FacesContext.getCurrentInstance().addMessage(null, message);
 			}
+			// try to close the remaining connection
+			// if still connected, system will close it
+			try {
+				geographyDao.closeSqlConnection();
+			} catch (Exception e2) {
+				e2.printStackTrace();
+			}
 			return null;
 		}
 		
@@ -150,6 +165,7 @@ public class RegionCtrl {
 	// not required methods
 	public String updateRegion() {		
 		try {
+			geographyDao = new GeographyDaoImpl();
 			geographyDao.updateRegion(region);
 			return "list_regions.xhtml";
 		} catch (Exception e) {
@@ -172,6 +188,13 @@ public class RegionCtrl {
 			else {
 				message = new FacesMessage("Error: " + e.toString());
 				FacesContext.getCurrentInstance().addMessage(null, message);
+			}
+			// try to close the remaining connection
+			// if still connected, system will close it
+			try {
+				geographyDao.closeSqlConnection();
+			} catch (Exception e2) {
+				e2.printStackTrace();
 			}
 			return null;
 		}

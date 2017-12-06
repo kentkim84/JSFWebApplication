@@ -25,10 +25,10 @@ public class StateCtrl {
 	}
 	
 	public void onLoad(String page) {
-		try {						
-			headOfStateDao = new HeadOfStateImpl();						
+		try {									
 			if (page.equals("list")) {				
 				System.out.println("Page is: " + page);
+				headOfStateDao = new HeadOfStateImpl();
 				state = new State();
 				stateList = new ArrayList<State>(headOfStateDao.getAllStates());
 			}
@@ -82,7 +82,7 @@ public class StateCtrl {
 			geographyDao = new GeographyDaoImpl();
 			countryList = new ArrayList<Country>(geographyDao.getAllCountries());
 			for (Country country : countryList) {
-				System.out.println("iteration: " + country.getCo_code() + " " + country.getCo_name());
+				System.out.println("iteration in the country list: " + country.getCo_code() + " " + country.getCo_name());
 				if (state.get_id().equalsIgnoreCase(country.getCo_code())) {
 					// handle the error, cannot add this state records
 					_idFound = true;
@@ -90,12 +90,14 @@ public class StateCtrl {
 				}
 			}
 			if(_idFound == true) {
+				headOfStateDao = new HeadOfStateImpl();
 				headOfStateDao.addState(state);
 				return "list_heads_of_state.xhtml";
 			}
 			else {
 				message = new FacesMessage("Error: Cannot add, could not find " + state.get_id());
 				FacesContext.getCurrentInstance().addMessage(null, message);
+				System.out.println("Error: Cannot add, could not find " + state.get_id());
 				return null;
 			}					
 		} catch (Exception me) {				
@@ -120,8 +122,15 @@ public class StateCtrl {
 				message = new FacesMessage("Error: " + me.toString());
 				FacesContext.getCurrentInstance().addMessage(null, message);
 			}
+			// try to close the remaining connection
+			// if still connected, system will close it
+			try {
+				headOfStateDao.closeMongoConnection();
+			} catch (Exception e2) {
+				e2.printStackTrace();
+			}
 			return null;
-		}	
+		}		
 	}
 	
 	public String deleteState(State state) {
@@ -144,6 +153,13 @@ public class StateCtrl {
 			else {
 				message = new FacesMessage("Error: " + e.toString());
 				FacesContext.getCurrentInstance().addMessage(null, message);
+			}
+			// try to close the remaining connection
+			// if still connected, system will close it
+			try {
+				headOfStateDao.closeMongoConnection();
+			} catch (Exception e2) {
+				e2.printStackTrace();
 			}
 			return null;
 		}

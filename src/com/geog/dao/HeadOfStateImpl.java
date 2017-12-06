@@ -25,12 +25,16 @@ public class HeadOfStateImpl implements HeadOfStateDao{
 		mongoClient = new MongoClient();		
 		MongoDatabase database = mongoClient.getDatabase("headsOfStateDB");
 		headsOfState =  database.getCollection("headsOfState");
-		System.out.println("\n---------------------- get the mongo connection ----------------------\n");
+		if (mongoClient != null) {
+			System.out.println("\n---------------------- get the mongo connection ----------------------\n");
+		}
 	}
 	
-	public void closeMongoConnection() {
+	public void closeMongoConnection() throws Exception{
 		mongoClient.close();
-		System.out.println("\n---------------------- close the mongo connection ----------------------\n");
+		if (mongoClient != null) {
+			System.out.println("\n---------------------- close the mongo connection ----------------------\n");
+		}
 	}
 	
 	@Override

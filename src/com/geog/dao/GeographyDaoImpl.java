@@ -30,13 +30,18 @@ public class GeographyDaoImpl implements GeographyDao {
 		Context ctx = new InitialContext();
 		DataSource ds = (DataSource)ctx.lookup("java:comp/env/jdbc/geography");
 		conn = ds.getConnection();
-		System.out.println("\n---------------------- get the sql connection ----------------------\n");
+		// connection error will throw the exception
+		if (conn != null) {
+			System.out.println("\n---------------------- get the sql connection ----------------------\n");
+		}
 	}
 	
 	public void closeSqlConnection() throws Exception {
 		// close the connection
 		conn.close();
-		System.out.println("\n---------------------- close the sql connection ----------------------\n");
+		if (conn != null) {
+			System.out.println("\n---------------------- close the sql connection ----------------------\n");
+		}		
 	}
 	
 	@Override

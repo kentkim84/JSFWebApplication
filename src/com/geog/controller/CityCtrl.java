@@ -25,10 +25,10 @@ public class CityCtrl {
 	}
 	
 	public void onLoad(String page) {
-		try {			
-			geographyDao = new GeographyDaoImpl();					
+		try {								
 			if (page.equals("list")) {				
 				System.out.println("Page is: " + page);
+				geographyDao = new GeographyDaoImpl();
 				city = new City();
 				cityList = new ArrayList<City>(geographyDao.getAllCities());
 			}
@@ -114,11 +114,11 @@ public class CityCtrl {
 		try {
 			geographyDao = new GeographyDaoImpl();
 			co_name = geographyDao.getValueFromMultiTables(this.city, "co_name", "co_code", "country");
+			return co_name;
 		} catch (Exception e) {
 			e.printStackTrace();
-			co_name = e.getMessage();
-		}
-		return co_name;
+			return null;
+		}		
 	}
 	
 	public String getReg_name() {
@@ -126,11 +126,11 @@ public class CityCtrl {
 		try {
 			geographyDao = new GeographyDaoImpl();
 			reg_name = geographyDao.getValueFromMultiTables(this.city, "reg_name", "reg_code", "region");
+			return reg_name;
 		} catch (Exception e) {
 			e.printStackTrace();
-			reg_name = e.getMessage();
+			return null;
 		}
-		return reg_name;
 	}
 
 	public List<City> getCityList() {
@@ -139,7 +139,8 @@ public class CityCtrl {
 		
 	public String addCity(City city) {
 		try {
-			geographyDao.addCity(city);;
+			geographyDao = new GeographyDaoImpl();
+			geographyDao.addCity(city);
 			return "list_cities.xhtml";
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -160,6 +161,13 @@ public class CityCtrl {
 			else {
 				message = new FacesMessage("Error: " + e.toString());
 				FacesContext.getCurrentInstance().addMessage(null, message);
+			}
+			// try to close the remaining connection
+			// if still connected, system will close it
+			try {
+				geographyDao.closeSqlConnection();
+			} catch (Exception e2) {
+				e2.printStackTrace();
 			}
 			return null;
 		}
@@ -203,6 +211,7 @@ public class CityCtrl {
 	
 	public String searchCities(City city) {				
 		try {
+			geographyDao = new GeographyDaoImpl();
 			resultList = new ArrayList<Result>(geographyDao.searchCities(city, condition));
 			return "find_result.xhtml";
 		} catch (Exception e) {
@@ -224,6 +233,13 @@ public class CityCtrl {
 			else {
 				message = new FacesMessage("Error: " + e.toString());
 				FacesContext.getCurrentInstance().addMessage(null, message);
+			}
+			// try to close the remaining connection
+			// if still connected, system will close it
+			try {
+				geographyDao.closeSqlConnection();
+			} catch (Exception e2) {
+				e2.printStackTrace();
 			}
 			return null;
 		}
@@ -259,6 +275,13 @@ public class CityCtrl {
 				message = new FacesMessage("Error: " + e.toString());
 				FacesContext.getCurrentInstance().addMessage(null, message);
 			}
+			// try to close the remaining connection
+			// if still connected, system will close it
+			try {
+				geographyDao.closeSqlConnection();
+			} catch (Exception e2) {
+				e2.printStackTrace();
+			}
 			return null;
 		}
 	}
@@ -266,6 +289,7 @@ public class CityCtrl {
 	// not required methods
 	public String updateCity() {		
 		try {
+			geographyDao = new GeographyDaoImpl();
 			geographyDao.updateCity(city);
 			return "list_cities.xhtml";
 		} catch (Exception e) {
@@ -287,6 +311,13 @@ public class CityCtrl {
 			else {
 				message = new FacesMessage("Error: " + e.toString());
 				FacesContext.getCurrentInstance().addMessage(null, message);
+			}
+			// try to close the remaining connection
+			// if still connected, system will close it
+			try {
+				geographyDao.closeSqlConnection();
+			} catch (Exception e2) {
+				e2.printStackTrace();
 			}
 			return null;
 		}

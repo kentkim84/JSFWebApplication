@@ -26,9 +26,9 @@ public class CountryCtrl {
 	
 	public void onLoad(String page) {
 		try {			
-			geographyDao = new GeographyDaoImpl();
 			if (page.equals("list")) {				
 				System.out.println("Page is: " + page);
+				geographyDao = new GeographyDaoImpl();
 				country = new Country();
 				countryList = new ArrayList<Country>(geographyDao.getAllCountries());				
 			}
@@ -84,6 +84,7 @@ public class CountryCtrl {
 	
 	public String addCountry(Country country) {
 		try {
+			geographyDao = new GeographyDaoImpl();
 			geographyDao.addCountry(country);
 			return "list_countries.xhtml";
 		} catch (Exception e) {			
@@ -105,6 +106,13 @@ public class CountryCtrl {
 			else {
 				message = new FacesMessage("Error: " + e.toString());
 				FacesContext.getCurrentInstance().addMessage(null, message);
+			}
+			// try to close the remaining connection
+			// if still connected, system will close it
+			try {
+				geographyDao.closeSqlConnection();
+			} catch (Exception e2) {
+				e2.printStackTrace();
 			}
 			return null;
 		} 
@@ -135,12 +143,20 @@ public class CountryCtrl {
 				message = new FacesMessage("Error: " + e.toString());
 				FacesContext.getCurrentInstance().addMessage(null, message);
 			}
+			// try to close the remaining connection
+			// if still connected, system will close it
+			try {
+				geographyDao.closeSqlConnection();
+			} catch (Exception e2) {
+				e2.printStackTrace();
+			}
 			return null;
 		}
 	}
 		
 	public String updateCountry() {
 		try {
+			geographyDao = new GeographyDaoImpl();
 			geographyDao.updateCountry(country, srcCo_code);
 			return "list_countries.xhtml";
 		} catch (Exception e) {
@@ -162,6 +178,13 @@ public class CountryCtrl {
 			else {
 				message = new FacesMessage("Error: " + e.toString());
 				FacesContext.getCurrentInstance().addMessage(null, message);
+			}
+			// try to close the remaining connection
+			// if still connected, system will close it
+			try {
+				geographyDao.closeSqlConnection();
+			} catch (Exception e2) {
+				e2.printStackTrace();
 			}
 			return null;
 		} 
