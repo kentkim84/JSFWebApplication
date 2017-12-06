@@ -15,13 +15,13 @@ public interface GeographyDao {
 	// Region section
 	public List<Region> getAllRegions() throws Exception;
 	public void addRegion(Region region) throws Exception;
-	public void updateRegion(Region region) throws Exception;
+	public void updateRegion(Region region, String srcReg_code) throws Exception;
 	public void deleteRegion(Region region) throws Exception;
 	// City section
 	public List<City> getAllCities() throws Exception;
 	public List<Result> searchCities(City city, String condition) throws Exception;
 	public String getValueFromMultiTables(City cty, String targetValue, String commonValue, String source) throws Exception;
 	public void addCity(City city) throws Exception;
-	public void updateCity(City city) throws Exception;
+	public void updateCity(City city, String srcCty_code) throws Exception;
 	public void deleteCity(City city) throws Exception;
 }

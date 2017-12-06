@@ -24,8 +24,12 @@ public class StateCtrl {
 	public StateCtrl() {
 	}
 	
+	// called before page is rendered
 	public void onLoad(String page) {
-		try {									
+		try {
+			// 1. list page will initiate the connection 
+			// 2. pre-load the array list only once before page is rendered
+			// 3. if error occurs, system displays error messages
 			if (page.equals("list")) {				
 				System.out.println("Page is: " + page);
 				headOfStateDao = new HeadOfStateImpl();
@@ -39,10 +43,10 @@ public class StateCtrl {
 			e.printStackTrace();
 			// connection error handling
 			if (e.toString().contains("MongoException") 
-					&& (e.toString().contains("MongoSocketOpenException")
+					|| e.toString().contains("MongoSocketOpenException")
 					|| e.toString().contains("ConnectException")
-					|| e.toString().contains("MongoTimeoutException"))) {
-				FacesMessage message = new FacesMessage(e.getMessage());
+					|| e.toString().contains("MongoTimeoutException")) {
+				FacesMessage message = new FacesMessage("Error: Cannot connect to Mongo Database");
 				FacesContext.getCurrentInstance().addMessage(null, message);
 			}
 			// other error handling
@@ -76,6 +80,10 @@ public class StateCtrl {
 		return stateList;
 	}
 	
+	// 1. initiate the connection
+	// 2. try to find the value exist in the country table
+	// 3. if exist, try to add values into database
+	// 4. if error occurs, system displays error messages
 	public String addState(State state) {
 		boolean _idFound = false;			
 		try {				
@@ -95,7 +103,8 @@ public class StateCtrl {
 				return "list_heads_of_state.xhtml";
 			}
 			else {
-				message = new FacesMessage("Error: Cannot add, could not find " + state.get_id());
+				message = new FacesMessage("Error: Cannot Add Head of State '" + state.getHeadOfState() 
+					+ "' Country Code '" + state.get_id() + "' does not exists");
 				FacesContext.getCurrentInstance().addMessage(null, message);
 				System.out.println("Error: Cannot add, could not find " + state.get_id());
 				return null;
@@ -107,13 +116,19 @@ public class StateCtrl {
 					|| me.toString().contains("MongoSocketOpenException")
 					|| me.toString().contains("ConnectException")
 					|| me.toString().contains("MongoTimeoutException")) {
-				FacesMessage message = new FacesMessage(me.getMessage());
+				FacesMessage message = new FacesMessage("Error: Cannot connect to Mongo Database");
 				FacesContext.getCurrentInstance().addMessage(null, message);
 			}
-			else if (me.toString().contains("CommunicationsException") 
+			else if (me.toString().contains("SQLException")
+					|| me.toString().contains("CommunicationsException") 
 					|| me.toString().contains("SocketException")
 					|| me.toString().contains("ConnectException")) {
-				message = new FacesMessage(me.getMessage());
+				message = new FacesMessage("Error: Cannot connect to Sql Database");
+				FacesContext.getCurrentInstance().addMessage(null, message);				
+			}
+			else if (me.toString().contains("MongoWriteException")) {
+				message = new FacesMessage("Error: Cannot Add Head of State '" + state.getHeadOfState() 
+				+ "' Country Code '" + state.get_id() + "' already exists");
 				FacesContext.getCurrentInstance().addMessage(null, message);				
 			}
 			// other error handling
@@ -133,6 +148,9 @@ public class StateCtrl {
 		}		
 	}
 	
+	// 1. initiate the connection
+	// 2. try to delete values from database
+	// 3. if error occurs, system displays error messages
 	public String deleteState(State state) {
 		try {
 			headOfStateDao = new HeadOfStateImpl();
@@ -145,7 +163,7 @@ public class StateCtrl {
 					&& (e.toString().contains("MongoSocketOpenException")
 					|| e.toString().contains("ConnectException")
 					|| e.toString().contains("MongoTimeoutException"))) {
-				FacesMessage message = new FacesMessage(e.getMessage());
+				FacesMessage message = new FacesMessage("Error: Cannot connect to Mongo Database");
 				FacesContext.getCurrentInstance().addMessage(null, message);
 			}
 			// other error handling

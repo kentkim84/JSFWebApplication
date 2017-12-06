@@ -7,11 +7,10 @@ import java.sql.Statement;
 import javax.naming.Context;
 import javax.naming.InitialContext;
 import javax.sql.DataSource;
-
 // utilities and model package 
 import java.util.ArrayList;
 import java.util.List;
-
+// model package
 import com.geog.model.*;
 
 public class GeographyDaoImpl implements GeographyDao {	
@@ -32,7 +31,7 @@ public class GeographyDaoImpl implements GeographyDao {
 		conn = ds.getConnection();
 		// connection error will throw the exception
 		if (conn != null) {
-			System.out.println("\n---------------------- get the sql connection ----------------------\n");
+			System.out.println("Open the Sql Connection");
 		}
 	}
 	
@@ -40,10 +39,16 @@ public class GeographyDaoImpl implements GeographyDao {
 		// close the connection
 		conn.close();
 		if (conn != null) {
-			System.out.println("\n---------------------- close the sql connection ----------------------\n");
+			System.out.println("Close the Sql Connection");
 		}		
 	}
 	
+	// Get List:
+	// 1. create the statement
+	// 2. execute the query
+	// 3. get data from the table (Country, Region, City)
+	// 4. iterate the result set and put each result into the array list
+	// 5. close the result set, statement and connection
 	@Override
 	public List<Country> getAllCountries() throws Exception {
 		Statement stmt = null;
@@ -70,7 +75,11 @@ public class GeographyDaoImpl implements GeographyDao {
 		closeSqlConnection();
 		return countryList;
 	}
-
+	
+	// Add values:
+	// 1. prepare the statement with the parameter
+	// 2. execute/update the query
+	// 3. close the prepared statement and connection
 	@Override
 	public void addCountry(Country country) throws Exception {
 		PreparedStatement pstmt = null;
@@ -86,6 +95,11 @@ public class GeographyDaoImpl implements GeographyDao {
 		closeSqlConnection();
 	}
 
+	// Update values:
+	// 1. prepare the statement with the parameters, 
+	// srcCo_code (source country code) indicates where values updated
+	// 2. execute/update the query
+	// 3. close the prepared statement and connection
 	@Override
 	public void updateCountry(Country country, String srcCo_code) throws Exception {
 		PreparedStatement pstmt = null;
@@ -95,13 +109,17 @@ public class GeographyDaoImpl implements GeographyDao {
 		pstmt.setString(++i, country.getCo_code());
 		pstmt.setString(++i, country.getCo_name());
 		pstmt.setString(++i, country.getCo_details());
-		pstmt.setString(++i, srcCo_code);	
+		pstmt.setString(++i, srcCo_code);
 		int j = pstmt.executeUpdate();  
 		System.out.println(j + " Country records updated");
 		pstmt.close();
 		closeSqlConnection();
 	}
 
+	// Delete values:
+	// 1. prepare the statement with the parameter
+	// 2. execute/update the query
+	// 3. close the prepared statement and connection
 	@Override
 	public void deleteCountry(Country country) throws Exception {
 		PreparedStatement pstmt = null;		
@@ -161,14 +179,15 @@ public class GeographyDaoImpl implements GeographyDao {
 	}
 
 	@Override
-	public void updateRegion(Region region) throws Exception {
+	public void updateRegion(Region region, String srcReg_code) throws Exception {
 		PreparedStatement pstmt = null;
 		int i = 0;
-		String query = "update region set reg_name = ?, reg_desc = ? where reg_code = ?";
+		String query = "update region set reg_code = ?, reg_name = ?, reg_desc = ? where reg_code = ?";
 		pstmt = conn.prepareStatement(query);
+		pstmt.setString(++i, region.getReg_code());
 		pstmt.setString(++i, region.getReg_name());
 		pstmt.setString(++i, region.getReg_details());
-		pstmt.setString(++i, region.getReg_code());			
+		pstmt.setString(++i, srcReg_code);
 		int j = pstmt.executeUpdate();  
 		System.out.println(j + " Region records updated");
 		pstmt.close();
@@ -223,6 +242,12 @@ public class GeographyDaoImpl implements GeographyDao {
 		return cityList;
 	}
 	
+	// Search values:
+	// 1. prepare the statement with the parameters, 
+	// 'condition'is the symbol that used to provide the comparison 
+	// between the population and the value which user specifically looking for
+	// 2. execute/update the query
+	// 3. close the prepared statement and connection
 	public List<Result> searchCities(City city, String condition) throws Exception {		
 		PreparedStatement pstmt = null;		
 		ResultSet rs = null;		
@@ -274,7 +299,10 @@ public class GeographyDaoImpl implements GeographyDao {
 		return resultList;
 	}
 	
-	// targetValue is which user wants to get from the source. ex) country name from the country table
+	// 1. specialised method that returns essentially, the 'target value' 
+	// which used to get either the name of country or region
+	// 2. 'source' indicates the table where the 'target value' is located
+	// 3. 'common value' is used for joining purpose in sql
 	public String getValueFromMultiTables(City cty, String targetValue, String commonValue, String source) throws Exception {
 		PreparedStatement pstmt = null;
 		ResultSet rs = null;
@@ -315,16 +343,17 @@ public class GeographyDaoImpl implements GeographyDao {
 	}
 
 	@Override
-	public void updateCity(City city) throws Exception {
+	public void updateCity(City city, String srcCty_code) throws Exception {
 		PreparedStatement pstmt = null;
 		int i = 0;
-		String query = "update city set cty_name = ?, population = ?, isCostal = ?, areaKM = ? where cty_code = ?";
+		String query = "update city set cty_code = ?, cty_name = ?, population = ?, isCostal = ?, areaKM = ? where cty_code = ?";
 		pstmt = conn.prepareStatement(query);
+		pstmt.setString(++i, city.getCty_code());
 		pstmt.setString(++i, city.getCty_name());
 		pstmt.setInt(++i, city.getPopulation());
 		pstmt.setString(++i, String.valueOf(city.getIsCoastal()));
 		pstmt.setDouble(++i, city.getAreaKm());
-		pstmt.setString(++i, city.getCty_code());
+		pstmt.setString(++i, srcCty_code);
 		int j = pstmt.executeUpdate();  
 		System.out.println(j + " City records updated");
 		pstmt.close();

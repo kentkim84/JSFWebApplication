@@ -11,7 +11,6 @@ import javax.faces.bean.ManagedBean;
 import javax.faces.bean.SessionScoped;
 import javax.faces.context.FacesContext;
 
-
 @ManagedBean
 @SessionScoped
 public class CountryCtrl {
@@ -24,8 +23,12 @@ public class CountryCtrl {
 	public CountryCtrl() {
 	}
 	
+	// called before page is rendered
 	public void onLoad(String page) {
-		try {			
+		try {
+			// 1. list page will initiate the connection 
+			// 2. pre-load the array list only once before page is rendered
+			// 3. if error occurs, system displays error messages
 			if (page.equals("list")) {				
 				System.out.println("Page is: " + page);
 				geographyDao = new GeographyDaoImpl();
@@ -39,10 +42,10 @@ public class CountryCtrl {
 			e.printStackTrace();
 			// connection error handling
 			if (e.toString().contains("SQLException") 
-					&& (e.toString().contains("CommunicationsException")
+					|| e.toString().contains("CommunicationsException")
 					|| e.toString().contains("ConnectException")
-					|| e.toString().contains("SocketException"))) {
-				FacesMessage message = new FacesMessage(e.getMessage());
+					|| e.toString().contains("SocketException")) {
+				FacesMessage message = new FacesMessage("Error: Cannot connect to Sql Database");
 				FacesContext.getCurrentInstance().addMessage(null, message);
 			}
 			// other error handling
@@ -82,6 +85,9 @@ public class CountryCtrl {
 		return countryList;
 	}
 	
+	// 1. initiate the connection
+	// 2. try to add values into database
+	// 3. if error occurs, system displays error messages
 	public String addCountry(Country country) {
 		try {
 			geographyDao = new GeographyDaoImpl();
@@ -90,15 +96,16 @@ public class CountryCtrl {
 		} catch (Exception e) {			
 			e.printStackTrace();
 			// connection error handling
-			if (e.toString().contains("CommunicationsException") 
+			if (e.toString().contains("SQLException")
+					|| e.toString().contains("CommunicationsException") 
 					|| e.toString().contains("SocketException")
 					|| e.toString().contains("ConnectException")) {
-				message = new FacesMessage(e.getMessage());
+				message = new FacesMessage("Error: Cannot connect to Sql Database");
 				FacesContext.getCurrentInstance().addMessage(null, message);			
 			}
 			// sql update error handling
 			else if (e.toString().contains("MySQLIntegrityConstraintViolationException")) {
-				message = new FacesMessage(e.getMessage());
+				message = new FacesMessage("Error: Cannot Add Country Code '" + country.getCo_code() + "' already exists");
 				FacesContext.getCurrentInstance().addMessage(null, message);
 			}
 			// other error handling
@@ -118,6 +125,9 @@ public class CountryCtrl {
 		} 
 	}
 	
+	// 1. initiate the connection
+	// 2. try to delete values from database
+	// 3. if error occurs, system displays error messages
 	public String deleteCountry(Country country) {
 		try {
 			geographyDao = new GeographyDaoImpl();
@@ -126,15 +136,17 @@ public class CountryCtrl {
 		} catch (Exception e) {
 			e.printStackTrace();
 			// connection error handling
-			if (e.toString().contains("CommunicationsException") 
+			if (e.toString().contains("SQLException") 
+					|| e.toString().contains("CommunicationsException") 
 					|| e.toString().contains("SocketException")
 					|| e.toString().contains("ConnectException")) {
-				message = new FacesMessage(e.getMessage());
+				message = new FacesMessage("Error: Cannot connect to Sql Database");
 				FacesContext.getCurrentInstance().addMessage(null, message);				
 			}
 			// sql update error handling
 			else if (e.toString().contains("MySQLIntegrityConstraintViolationException")) {
-				message = new FacesMessage(e.getMessage());
+				message = new FacesMessage("Error: Cannot Delete Country Code: '" + country.getCo_code()
+						+ "' as there are associated Regions");
 				FacesContext.getCurrentInstance().addMessage(null, message);
 			}
 			// other error handling
@@ -153,7 +165,10 @@ public class CountryCtrl {
 			return null;
 		}
 	}
-		
+	
+	// 1. initiate the connection
+	// 2. try to update values into database
+	// 3. if error occurs, system displays error messages
 	public String updateCountry() {
 		try {
 			geographyDao = new GeographyDaoImpl();
@@ -162,10 +177,11 @@ public class CountryCtrl {
 		} catch (Exception e) {
 			e.printStackTrace();
 			// connection error handling
-			if (e.toString().contains("CommunicationsException") 
+			if (e.toString().contains("SQLException") 
+					|| e.toString().contains("CommunicationsException") 
 					|| e.toString().contains("SocketException")
 					|| e.toString().contains("ConnectException")) {
-				message = new FacesMessage(e.getMessage());
+				message = new FacesMessage("Error: Cannot connect to Sql Database");
 				FacesContext.getCurrentInstance().addMessage(null, message);				
 			}
 			// sql update error handling
@@ -190,6 +206,7 @@ public class CountryCtrl {
 		} 
 	}
 	
+	// pass values to the other page
 	public String passValues(Country country) {
 		this.country.setCo_code(country.getCo_code());
 		this.country.setCo_name(country.getCo_name());

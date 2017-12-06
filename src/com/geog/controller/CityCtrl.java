@@ -19,13 +19,18 @@ public class CityCtrl {
 	private List<Result> resultList;
 	private City city;
 	private String condition;
+	private String srcCty_code;
 	private FacesMessage message;
 	
 	public CityCtrl() {
 	}
 	
+	// called before page is rendered
 	public void onLoad(String page) {
-		try {								
+		try {						
+			// 1. list page will initiate the connection 
+			// 2. pre-load the array list only once before page is rendered
+			// 3. if error occurs, system displays error messages
 			if (page.equals("list")) {				
 				System.out.println("Page is: " + page);
 				geographyDao = new GeographyDaoImpl();
@@ -39,10 +44,10 @@ public class CityCtrl {
 			e.printStackTrace();
 			// connection error handling
 			if (e.toString().contains("SQLException") 
-					&& (e.toString().contains("CommunicationsException")
+					|| e.toString().contains("CommunicationsException")
 					|| e.toString().contains("ConnectException")
-					|| e.toString().contains("SocketException"))) {
-				FacesMessage message = new FacesMessage(e.getMessage());
+					|| e.toString().contains("SocketException")) {
+				FacesMessage message = new FacesMessage("Error: Cannot connect to Sql Database");
 				FacesContext.getCurrentInstance().addMessage(null, message);
 			}
 			// other error handling
@@ -136,7 +141,10 @@ public class CityCtrl {
 	public List<City> getCityList() {
 		return cityList;
 	}
-		
+	
+	// 1. initiate the connection
+	// 2. try to add values into database
+	// 3. if error occurs, system displays error messages
 	public String addCity(City city) {
 		try {
 			geographyDao = new GeographyDaoImpl();
@@ -145,15 +153,19 @@ public class CityCtrl {
 		} catch (Exception e) {
 			e.printStackTrace();
 			// connection error handling
-			if (e.toString().contains("CommunicationsException") 
+			if (e.toString().contains("SQLException") 
+					|| e.toString().contains("CommunicationsException") 
 					|| e.toString().contains("SocketException")
 					|| e.toString().contains("ConnectException")) {
-				message = new FacesMessage(e.getMessage());
+				message = new FacesMessage("Error: Cannot connect to Sql Database");
 				FacesContext.getCurrentInstance().addMessage(null, message);				
 			}
 			// sql update error handling
 			else if (e.toString().contains("MySQLIntegrityConstraintViolationException")) {
-				message = new FacesMessage(e.getMessage());
+				message = new FacesMessage("Error: Cannot Add Country Code: '" + city.getCo_code() 
+					+ "', Region Code: '" + city.getReg_code()
+					+ "', and City Code: '" + city.getCty_code() 
+					+ "'. Please check if Country Code or Region Code does not exist, or City Code already exists");
 				FacesContext.getCurrentInstance().addMessage(null, message);
 			}
 			// other error handling
@@ -209,6 +221,9 @@ public class CityCtrl {
 		}		
 	}
 	
+	// 1. initiate the connection
+	// 2. try to search values from database
+	// 3. if error occurs, system displays error messages
 	public String searchCities(City city) {				
 		try {
 			geographyDao = new GeographyDaoImpl();
@@ -217,10 +232,11 @@ public class CityCtrl {
 		} catch (Exception e) {
 			e.printStackTrace();
 			// connection error handling
-			if (e.toString().contains("CommunicationsException") 
+			if (e.toString().contains("SQLException") 
+					|| e.toString().contains("CommunicationsException") 
 					|| e.toString().contains("SocketException")
 					|| e.toString().contains("ConnectException")) {
-				message = new FacesMessage(e.getMessage());
+				message = new FacesMessage("Error: Cannot connect to Sql Database");
 				FacesContext.getCurrentInstance().addMessage(null, message);				
 			}
 			// sql update error handling
@@ -250,6 +266,9 @@ public class CityCtrl {
 	}
 	
 	// release constraint
+	// 1. initiate the connection
+	// 2. try to delete values into database
+	// 3. if error occurs, system displays error messages
 	public String deleteCity() {					
 		try {
 			geographyDao = new GeographyDaoImpl();
@@ -258,10 +277,11 @@ public class CityCtrl {
 		} catch (Exception e) {
 			e.printStackTrace();
 			// connection error handling
-			if (e.toString().contains("CommunicationsException") 
+			if (e.toString().contains("SQLException") 
+					|| e.toString().contains("CommunicationsException") 
 					|| e.toString().contains("SocketException")
 					|| e.toString().contains("ConnectException")) {
-				message = new FacesMessage(e.getMessage());
+				message = new FacesMessage("Error: Cannot connect to Sql Database");
 				FacesContext.getCurrentInstance().addMessage(null, message);				
 			}
 			// sql update error handling
@@ -287,18 +307,22 @@ public class CityCtrl {
 	}
 	
 	// not required methods
+	// 1. initiate the connection
+	// 2. try to update values into database
+	// 3. if error occurs, system displays error messages
 	public String updateCity() {		
 		try {
 			geographyDao = new GeographyDaoImpl();
-			geographyDao.updateCity(city);
+			geographyDao.updateCity(city, srcCty_code);
 			return "list_cities.xhtml";
 		} catch (Exception e) {
 			e.printStackTrace();
 			// connection error handling
-			if (e.toString().contains("CommunicationsException") 
+			if (e.toString().contains("SQLException") 
+					|| e.toString().contains("CommunicationsException") 
 					|| e.toString().contains("SocketException")
 					|| e.toString().contains("ConnectException")) {
-				message = new FacesMessage(e.getMessage());
+				message = new FacesMessage("Error: Cannot connect to Sql Database");
 				FacesContext.getCurrentInstance().addMessage(null, message);				
 			}
 			// sql update error handling
@@ -323,6 +347,7 @@ public class CityCtrl {
 		}
 	}
 	
+	// pass values to the other page
 	public String passValues(City city) {
 		this.city.setCty_code(city.getCty_code());
 		this.city.setCo_code(city.getCo_code());
