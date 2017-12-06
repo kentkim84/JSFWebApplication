@@ -24,7 +24,13 @@ public class HeadOfStateImpl implements HeadOfStateDao{
 		// establish a connection
 		mongoClient = new MongoClient();		
 		MongoDatabase database = mongoClient.getDatabase("headsOfStateDB");
-		headsOfState =  database.getCollection("headsOfState");		
+		headsOfState =  database.getCollection("headsOfState");
+		System.out.println("\n---------------------- get the mongo connection ----------------------\n");
+	}
+	
+	public void closeMongoConnection() {
+		mongoClient.close();
+		System.out.println("\n---------------------- close the mongo connection ----------------------\n");
 	}
 	
 	@Override
@@ -41,7 +47,8 @@ public class HeadOfStateImpl implements HeadOfStateDao{
 			state.set_id(_id);
 			state.setHeadOfState(headOfState);			
 			stateList.add(state);
-		}			
+		}
+		closeMongoConnection();
 		return stateList;
 	}
 	public void addState(State state) throws Exception{		
@@ -51,6 +58,7 @@ public class HeadOfStateImpl implements HeadOfStateDao{
 				.append("headOfState", state.getHeadOfState());	            
 			headsOfState.insertOne(doc);
 			System.out.println("Head of State records added");
+			closeMongoConnection();
 	    }	
 	}
 	public void deleteState(State state) throws Exception{		
@@ -58,6 +66,7 @@ public class HeadOfStateImpl implements HeadOfStateDao{
 			Document doc = new Document("_id", state.get_id());          
 			headsOfState.deleteOne(doc);
 			System.out.println("Head of State records deleted");
+			closeMongoConnection();
 		}	
 	}
 }

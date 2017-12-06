@@ -24,11 +24,17 @@ public class StateCtrl {
 	public StateCtrl() {
 	}
 	
-	public void onload() {
-		try {			
-			state = new State();
-			headOfStateDao = new HeadOfStateImpl();			
-			stateList = new ArrayList<State>(headOfStateDao.getAllStates());			
+	public void onLoad(String page) {
+		try {						
+			headOfStateDao = new HeadOfStateImpl();						
+			if (page.equals("list")) {				
+				System.out.println("Page is: " + page);
+				state = new State();
+				stateList = new ArrayList<State>(headOfStateDao.getAllStates());
+			}
+			else {
+				System.out.println("Page is: " + page);
+			}
 		} catch (Exception e) { 
 			e.printStackTrace();
 			// connection error handling
@@ -120,6 +126,7 @@ public class StateCtrl {
 	
 	public String deleteState(State state) {
 		try {
+			headOfStateDao = new HeadOfStateImpl();
 			headOfStateDao.deleteState(state);
 			return "list_heads_of_state.xhtml";
 		} catch (Exception e) {
@@ -141,5 +148,5 @@ public class StateCtrl {
 			return null;
 		}
 	}
-
+	
 }

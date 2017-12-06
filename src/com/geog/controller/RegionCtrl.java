@@ -22,11 +22,17 @@ public class RegionCtrl {
 	public RegionCtrl() {
 	}
 	
-	public void onload() {
-		try {
-			region = new Region();
-			geographyDao = new GeographyDaoImpl();			
-			regionList = new ArrayList<Region>(geographyDao.getAllRegions());		
+	public void onLoad(String page) {
+		try {			
+			geographyDao = new GeographyDaoImpl();						
+			if (page.equals("list")) {
+				System.out.println("Page is: " + page);
+				region = new Region();
+				regionList = new ArrayList<Region>(geographyDao.getAllRegions());
+			}
+			else {
+				System.out.println("Page is: " + page);
+			}
 		} catch (Exception e) {
 			e.printStackTrace();
 			// connection error handling
@@ -113,6 +119,7 @@ public class RegionCtrl {
 	// release constraint
 	public String deleteRegion(Region region) {
 		try {
+			geographyDao = new GeographyDaoImpl();
 			geographyDao.deleteRegion(region);
 			return "list_regions.xhtml";
 		} catch (Exception e) {

@@ -21,15 +21,22 @@ public class GeographyDaoImpl implements GeographyDao {
 	private List<City> cityList;
 	private List<Result> resultList;
 	
-	public GeographyDaoImpl() throws Exception {
+	public GeographyDaoImpl() throws Exception {	
 		initSqlConnection();
 	}
 	
 	public void initSqlConnection() throws Exception {
-		// establish a connection
+		// establish the connection
 		Context ctx = new InitialContext();
 		DataSource ds = (DataSource)ctx.lookup("java:comp/env/jdbc/geography");
 		conn = ds.getConnection();
+		System.out.println("\n---------------------- get the sql connection ----------------------\n");
+	}
+	
+	public void closeSqlConnection() throws Exception {
+		// close the connection
+		conn.close();
+		System.out.println("\n---------------------- close the sql connection ----------------------\n");
 	}
 	
 	@Override
@@ -55,6 +62,7 @@ public class GeographyDaoImpl implements GeographyDao {
 		}
 		rs.close();
 		stmt.close();
+		closeSqlConnection();
 		return countryList;
 	}
 
@@ -70,6 +78,7 @@ public class GeographyDaoImpl implements GeographyDao {
 		int j = pstmt.executeUpdate();
 		System.out.println(j + " Country records added");
 		pstmt.close();
+		closeSqlConnection();
 	}
 
 	@Override
@@ -85,6 +94,7 @@ public class GeographyDaoImpl implements GeographyDao {
 		int j = pstmt.executeUpdate();  
 		System.out.println(j + " Country records updated");
 		pstmt.close();
+		closeSqlConnection();
 	}
 
 	@Override
@@ -97,6 +107,7 @@ public class GeographyDaoImpl implements GeographyDao {
 		int j = pstmt.executeUpdate();  
 		System.out.println(j + " Country records deleted");
 		pstmt.close();
+		closeSqlConnection();
 	}
 
 	@Override
@@ -124,6 +135,7 @@ public class GeographyDaoImpl implements GeographyDao {
 		}
 		rs.close();
 		stmt.close();
+		closeSqlConnection();
 		return regionList;
 	}
 
@@ -140,6 +152,7 @@ public class GeographyDaoImpl implements GeographyDao {
 		int j = pstmt.executeUpdate();  
 		System.out.println(j + " Region records added");
 		pstmt.close();
+		closeSqlConnection();
 	}
 
 	@Override
@@ -153,7 +166,8 @@ public class GeographyDaoImpl implements GeographyDao {
 		pstmt.setString(++i, region.getReg_code());			
 		int j = pstmt.executeUpdate();  
 		System.out.println(j + " Region records updated");
-		pstmt.close();	
+		pstmt.close();
+		closeSqlConnection();
 	}
 
 	@Override
@@ -165,7 +179,8 @@ public class GeographyDaoImpl implements GeographyDao {
 		pstmt.setString(++i, region.getReg_code());			
 		int j = pstmt.executeUpdate();  
 		System.out.println(j + " Region records deleted");
-		pstmt.close();	
+		pstmt.close();
+		closeSqlConnection();
 	}
 	
 	@Override
@@ -199,6 +214,7 @@ public class GeographyDaoImpl implements GeographyDao {
 		}
 		rs.close();
 		stmt.close();
+		closeSqlConnection();
 		return cityList;
 	}
 	
@@ -243,11 +259,13 @@ public class GeographyDaoImpl implements GeographyDao {
 				result.setPopulation(population);
 				result.setIsCoastal(isCoastal);
 				result.setAreaKm(areaKM);
-				resultList.add(result);		
+				resultList.add(result);
+				System.out.println(cty_code+"\n"+cty_name+"\n"+co_name+"\n"+reg_name+"\n"+population+"\n"+isCoastal+"\n"+areaKM);
 			} while (rs.next());
 		}
 		rs.close();
 		pstmt.close();
+		closeSqlConnection();
 		return resultList;
 	}
 	
@@ -265,8 +283,10 @@ public class GeographyDaoImpl implements GeographyDao {
 		if (rs.next()) {
 			do {					
 				output = rs.getString(1);
+				System.out.println(output+"\n");
 			} while (rs.next());
-		}		
+		}
+		closeSqlConnection();
 		return output;
 	}
 
@@ -286,6 +306,7 @@ public class GeographyDaoImpl implements GeographyDao {
 		int j = pstmt.executeUpdate();  
 		System.out.println(j + " City records added");
 		pstmt.close();
+		closeSqlConnection();
 	}
 
 	@Override
@@ -302,6 +323,7 @@ public class GeographyDaoImpl implements GeographyDao {
 		int j = pstmt.executeUpdate();  
 		System.out.println(j + " City records updated");
 		pstmt.close();
+		closeSqlConnection();
 	}
 
 	@Override
@@ -314,5 +336,6 @@ public class GeographyDaoImpl implements GeographyDao {
 		int j = pstmt.executeUpdate();  
 		System.out.println(j + " City records deleted");
 		pstmt.close();
+		closeSqlConnection();
 	}	
 }

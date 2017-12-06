@@ -24,11 +24,17 @@ public class CityCtrl {
 	public CityCtrl() {
 	}
 	
-	public void onload() {
-		try {
-			city = new City();
-			geographyDao = new GeographyDaoImpl();			
-			cityList = new ArrayList<City>(geographyDao.getAllCities());			
+	public void onLoad(String page) {
+		try {			
+			geographyDao = new GeographyDaoImpl();					
+			if (page.equals("list")) {				
+				System.out.println("Page is: " + page);
+				city = new City();
+				cityList = new ArrayList<City>(geographyDao.getAllCities());
+			}
+			else {
+				System.out.println("Page is: " + page);
+			}
 		} catch (Exception e) {
 			e.printStackTrace();
 			// connection error handling
@@ -106,6 +112,7 @@ public class CityCtrl {
 	public String getCo_name() {
 		String co_name;
 		try {
+			geographyDao = new GeographyDaoImpl();
 			co_name = geographyDao.getValueFromMultiTables(this.city, "co_name", "co_code", "country");
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -117,6 +124,7 @@ public class CityCtrl {
 	public String getReg_name() {
 		String reg_name;	
 		try {
+			geographyDao = new GeographyDaoImpl();
 			reg_name = geographyDao.getValueFromMultiTables(this.city, "reg_name", "reg_code", "region");
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -163,8 +171,7 @@ public class CityCtrl {
 		// country and region name are executed from separated methods
 		this.city.setPopulation(city.getPopulation());
 		this.city.setIsCoastal(city.getIsCoastal());
-		this.city.setAreaKm(city.getAreaKm());
-		System.out.println(this.city.getCty_code());
+		this.city.setAreaKm(city.getAreaKm());		
 		return "display_city.xhtml";
 	}
 	
@@ -227,10 +234,9 @@ public class CityCtrl {
 	}
 	
 	// release constraint
-	public String deleteCity() {				
-		System.out.println(this.city.getCty_code());
-		System.out.println(city.getCty_code());
+	public String deleteCity() {					
 		try {
+			geographyDao = new GeographyDaoImpl();
 			geographyDao.deleteCity(city);
 			return "list_cities.xhtml";
 		} catch (Exception e) {

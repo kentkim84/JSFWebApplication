@@ -6,6 +6,7 @@ import com.geog.model.*;
 public interface GeographyDao {
 	// initialisation section
 	public void initSqlConnection() throws Exception;	
+	public void closeSqlConnection() throws Exception;
 	// Country section	
 	public List<Country> getAllCountries() throws Exception;
 	public void addCountry(Country country) throws Exception;

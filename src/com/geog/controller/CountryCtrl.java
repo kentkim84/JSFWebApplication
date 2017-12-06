@@ -24,11 +24,17 @@ public class CountryCtrl {
 	public CountryCtrl() {
 	}
 	
-	public void onload() {
-		try {
-			country = new Country();
-			geographyDao = new GeographyDaoImpl();									
-			countryList = new ArrayList<Country>(geographyDao.getAllCountries());			
+	public void onLoad(String page) {
+		try {			
+			geographyDao = new GeographyDaoImpl();
+			if (page.equals("list")) {				
+				System.out.println("Page is: " + page);
+				country = new Country();
+				countryList = new ArrayList<Country>(geographyDao.getAllCountries());				
+			}
+			else {
+				System.out.println("Page is: " + page);
+			}
 		} catch (Exception e) {			
 			e.printStackTrace();
 			// connection error handling
@@ -87,7 +93,7 @@ public class CountryCtrl {
 					|| e.toString().contains("SocketException")
 					|| e.toString().contains("ConnectException")) {
 				message = new FacesMessage(e.getMessage());
-				FacesContext.getCurrentInstance().addMessage(null, message);				
+				FacesContext.getCurrentInstance().addMessage(null, message);			
 			}
 			// sql update error handling
 			else if (e.toString().contains("MySQLIntegrityConstraintViolationException")) {
@@ -101,11 +107,12 @@ public class CountryCtrl {
 				FacesContext.getCurrentInstance().addMessage(null, message);
 			}
 			return null;
-		}	
+		} 
 	}
 	
 	public String deleteCountry(Country country) {
 		try {
+			geographyDao = new GeographyDaoImpl();
 			geographyDao.deleteCountry(country);
 			return "list_countries.xhtml";
 		} catch (Exception e) {
@@ -129,7 +136,7 @@ public class CountryCtrl {
 				FacesContext.getCurrentInstance().addMessage(null, message);
 			}
 			return null;
-		}		
+		}
 	}
 		
 	public String updateCountry() {
@@ -157,14 +164,14 @@ public class CountryCtrl {
 				FacesContext.getCurrentInstance().addMessage(null, message);
 			}
 			return null;
-		}
+		} 
 	}
 	
 	public String passValues(Country country) {
 		this.country.setCo_code(country.getCo_code());
 		this.country.setCo_name(country.getCo_name());
 		this.country.setCo_details(country.getCo_details());
-		srcCo_code = country.getCo_code();		
+		srcCo_code = country.getCo_code();
 		return "update_country.xhtml";
 	}
 }

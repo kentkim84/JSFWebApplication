@@ -8,6 +8,9 @@
 	<h:outputStylesheet library = "css" name = "styles.css"  />
 </h:head>
 <h:body>
+	<f:metadata>	
+		<f:event type="preRenderView" listener="#{countryCtrl.onLoad('add')}" />		
+	</f:metadata>
 	<h:form id="form">
 		<h:messages globalOnly="true" styleClass="error" />
 		<h3>Add Country</h3>		

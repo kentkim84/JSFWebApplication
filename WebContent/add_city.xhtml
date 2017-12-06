@@ -8,6 +8,9 @@
 	<h:outputStylesheet library = "css" name = "styles.css"  />
 </h:head>
 <h:body>
+	<f:metadata>	
+		<f:event type="preRenderView" listener="#{cityCtrl.onLoad('add')}" />
+	</f:metadata>
 	<h:form id="form">		
 		<h:messages globalOnly="true" styleClass="error" />
 		<h3>Add City</h3>		
@@ -31,7 +34,7 @@
 		<h:inputText id="population" value="#{city.population}"/>
 		<br/>
 		<h:outputLabel for="byTheSea">By The Sea: </h:outputLabel>
-		<h:selectOneMenu value = "#{city.isCoastal}"> 
+		<h:selectOneMenu id="byTheSea" value = "#{city.isCoastal}"> 
 			<f:selectItem itemValue = "true" itemLabel = "True" /> 
 			<f:selectItem itemValue = "false" itemLabel = "False" />     
 		</h:selectOneMenu>
